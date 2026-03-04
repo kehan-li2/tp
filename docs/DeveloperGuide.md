@@ -297,14 +297,35 @@ details as well as allow them to easily track upcoming visits with the various f
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …​                                    | I want to …​                    | So that I can…​                                           |
+|----------|--------------------------------------------|---------------------------------|-----------------------------------------------------------|
+| `* * *` | user | add a contact with basic details | quickly identify who is being visited |
+| `* * *` | user | delete a contact | remove contacts that are no longer needed |
+| `* * *` | user | store an address with each contact | know where to go for home visits |
+| `* * *` | user | set a visit date | know when to go for home visits |
+| `* * *` | user | see visit date and time clearly | manage daily schedule effectively |
+| `* * *` | user | add tags to differentiate clients and services | retrieve relevant contact details quickly |
+| `* * *` | user | add tags to differentiate case ID / client groups | retrieve relevant contact details quickly |
+| `* * *` | user | filter contacts based on tags | quickly view related contacts based on tag |
+| `* * *` | user | search for a name | reference contacts clearly |
+| `* *` | user | see upcoming visits alongside past ones | plan follow-ups effectively |
+| `* *` | user | have a clean and simple layout | find information quickly between visits |
+| `* *` | user | sort contacts by name or ID | find contacts easily |
+| `* *` | user | mark a contact’s status (e.g. stable, urgent) | prioritise my work |
+| `* *` | user | add a visit note to a contact | remember the purpose of the visit |
+| `* *` | user | reuse past commands | execute commands faster |
+| `* *` | user | undo commands | undo any wrong changes  |
+| `* *` | expert user | add aliases to commands | execute commands faster |
+| `* *` | new user | see sample commands | know valid command formats |
+| `*` | user | add a specific visit location | quickly reference where the visit takes place |
+| `*` | user | set visit type (e.g. consultation, remote) | understand the nature of the visit |
+| `*` | user | specify the visit duration | plan my time realistically |
+| `*` | user | view completed visits | understand my visit history |
+| `*` | user | mark a visit as planned, completed, or cancelled | track visit status and outcomes |
+| `*` | user | be sure that visit records remains unchanged | be held accountable for the visit |
+| `*` | new user | view a list of common commands when opening the app | refer to instructions without using an external manual |
+| `*` | new user | transfer my contact details from my phone’s contact list to CareSync | transition to using CareSync easily |
+
 
 *{More to be added}*
 
