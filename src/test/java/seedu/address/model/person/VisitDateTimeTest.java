@@ -3,6 +3,7 @@ package seedu.address.model.person;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -75,6 +76,40 @@ public class VisitDateTimeTest {
     public void testGetDisplayValue() {
         VisitDateTime visitDateTime = new VisitDateTime("2026-03-15 14:30");
         assertEquals("15 Mar 2026, 02:30 PM", visitDateTime.getDisplayValue());
+    }
+
+    @Test
+    public void equals_bothEmpty_true() {
+        VisitDateTime empty1 = new VisitDateTime();
+        VisitDateTime empty2 = new VisitDateTime();
+        assertTrue(empty1.equals(empty2)); // covers both-null branch
+    }
+
+    @Test
+    public void equals_oneEmptyOnePresent_false() {
+        VisitDateTime empty = new VisitDateTime();
+        VisitDateTime present = new VisitDateTime("2026-03-15 14:30");
+        assertFalse(empty.equals(present)); // covers one-null branch
+        assertFalse(present.equals(empty)); // symmetric check
+    }
+
+    @Test
+    public void equals_bothPresentSameValue_true() {
+        VisitDateTime first = new VisitDateTime("2026-03-15 14:30");
+        VisitDateTime second = new VisitDateTime("2026-03-15 14:30");
+        assertTrue(first.equals(second)); // covers value.equals(...) branch
+    }
+
+    @Test
+    public void hashCode_empty_zero() {
+        VisitDateTime empty = new VisitDateTime();
+        assertEquals(0, empty.hashCode()); // covers null hash branch
+    }
+
+    @Test
+    public void hashCode_present_matchesValueHash() {
+        VisitDateTime present = new VisitDateTime("2026-03-15 14:30");
+        assertNotEquals(0, present.hashCode()); // covers non-null hash branch
     }
 }
 
