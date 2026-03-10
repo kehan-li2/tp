@@ -20,7 +20,7 @@ public class Person {
     private final Name name;
     private final Phone phone;
     private final Email email;
-    private  final Note note;
+    private final Note note;
 
     // Data fields
     private final Address address;
