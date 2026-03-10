@@ -14,11 +14,19 @@ public class ListCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "Listed all persons";
 
+    private final String sortField;
+
+    public ListCommand(String sortField) {
+        this.sortField = sortField;
+    }
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        if (!sortField.isEmpty()) {
+            model.sortFilteredPersonList(sortField);
+        }
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }
