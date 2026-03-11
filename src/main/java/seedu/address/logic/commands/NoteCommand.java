@@ -19,11 +19,11 @@ import seedu.address.model.person.Person;
 public class NoteCommand extends Command {
 
     public static final String COMMAND_WORD = "note";
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits person's note. "
-            + "by the list index number. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the note of the person identified "
+            + "by the index number used in the last person listing.\n"
             + "Existing note will be overwritten by the input.\n"
             + "Parameters: INDEX (must be a positive number) nt/ [NOTE]\n"
-            + "Example: " + COMMAND_WORD + " 1 nt/ Likes baseball";
+            + "Example: " + COMMAND_WORD + " 1 nt/ To help apply for financial aid";
     public static final String MESSAGE_ADD_NOTE_SUCCESS = "Added note to Person: %1$s";
     public static final String MESSAGE_DELETE_NOTE_SUCCESS = "Removed note from Person: %1$s";
     private final Index index;
