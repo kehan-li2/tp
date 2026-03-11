@@ -88,6 +88,10 @@ public class PersonTest {
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // different visitDateTime -> returns false
+        editedAlice = new PersonBuilder(ALICE).withVisitDateTime("2026-12-01 14:00").build();
+        assertFalse(ALICE.equals(editedAlice));
     }
 
     @Test
