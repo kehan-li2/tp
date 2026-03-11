@@ -30,7 +30,6 @@ public class ListCommandParser implements Parser<ListCommand> {
                 .orElse("");
 
         if (!sortField.isEmpty() && !SORT_BY_NAME.equals(sortField)) {
-
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         }

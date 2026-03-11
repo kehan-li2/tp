@@ -21,7 +21,7 @@ public class ListCommand extends Command {
             + "Optionally sorts the list.\n"
             + "Parameters: [" + PREFIX_SORT + "Field]\n"
             + "Example: " + COMMAND_WORD + "\n"
-            + "Example: " + COMMAND_WORD + " s/name";
+            + "Example: " + COMMAND_WORD + " " + PREFIX_SORT + "name";
 
     private final String sortField;
 
@@ -45,6 +45,18 @@ public class ListCommand extends Command {
             model.resetSort();
             return new CommandResult(MESSAGE_SUCCESS);
         }
+    }
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof ListCommand otherCommand)) {
+            return false;
+        }
+
+        return sortField.equals(otherCommand.sortField);
     }
 }
 
