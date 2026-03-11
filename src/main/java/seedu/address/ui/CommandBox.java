@@ -2,6 +2,8 @@ package seedu.address.ui;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import seedu.address.logic.commands.CommandResult;
@@ -17,6 +19,7 @@ public class CommandBox extends UiPart<Region> {
     private static final String FXML = "CommandBox.fxml";
 
     private final CommandExecutor commandExecutor;
+    private String mostRecentCommand = "";
 
     @FXML
     private TextField commandTextField;
@@ -27,8 +30,10 @@ public class CommandBox extends UiPart<Region> {
     public CommandBox(CommandExecutor commandExecutor) {
         super(FXML);
         this.commandExecutor = commandExecutor;
-        // calls #setStyleToDefault() whenever there is a change to the text of the command box.
+        // calls #setStyleToDefault() whenever there is a change to the text of the
+        // command box.
         commandTextField.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
+        commandTextField.setOnKeyPressed(this::handleCommandHistoryNavigation);
     }
 
     /**
@@ -41,12 +46,27 @@ public class CommandBox extends UiPart<Region> {
             return;
         }
 
+        mostRecentCommand = commandText;
+
         try {
             commandExecutor.execute(commandText);
             commandTextField.setText("");
         } catch (CommandException | ParseException e) {
             setStyleToIndicateCommandFailure();
         }
+    }
+
+    /**
+     * Handles key presses in the command box to support command recall.
+     */
+    private void handleCommandHistoryNavigation(KeyEvent event) {
+        if (event.getCode() != KeyCode.DOWN || mostRecentCommand.isEmpty()) {
+            return;
+        }
+
+        commandTextField.setText(mostRecentCommand);
+        commandTextField.positionCaret(mostRecentCommand.length());
+        event.consume();
     }
 
     /**
