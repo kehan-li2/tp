@@ -10,7 +10,8 @@ public class Note {
     public static final String MESSAGE_CONSTRAINTS = "Notes can be any values, and it should not be null";
 
     /*
-     * Allows any character, also empty strings.
+     * Allows up to 500 characters consisting of letters, numbers, punctuation,
+     * symbols, spaces, tabs, and line breaks.
      */
     public static final String VALIDATION_REGEX = "^[\\p{L}\\p{N}\\p{P}\\p{S}\\p{Zs}\\r\\n\\t]{0,500}$";
     public final String value;
