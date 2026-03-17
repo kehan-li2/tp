@@ -40,5 +40,13 @@ public class ListCommandParserTest {
                 " " + PREFIX_SORT + "Name",
                 new ListCommand("name"));
     }
+
+    @Test
+    public void parse_validSortVisit_success() {
+        assertParseSuccess(parser,
+                " " + PREFIX_SORT + "visit",
+                new ListCommand("visit"));
+    }
 }
+
 
