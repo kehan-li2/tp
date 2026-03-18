@@ -167,11 +167,9 @@ public class ModelManager implements Model {
             );
             break;
 
-
         default:
             return;
         }
-
         sortedPersons.setComparator(comparator);
     }
 
