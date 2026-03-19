@@ -18,10 +18,12 @@ public class ListCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Lists all persons in the address book.\n"
-            + "Optionally sorts the list.\n"
-            + "Parameters: [" + PREFIX_SORT + "Field]\n"
+            + "Optionally sorts the list by a field.\n"
+            + "Parameters: [" + PREFIX_SORT + "FIELD]\n"
+            + "Valid fields: name, visit\n"
             + "Example: " + COMMAND_WORD + "\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_SORT + "name";
+            + "Example: " + COMMAND_WORD + " " + PREFIX_SORT + "name\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_SORT + "visit";
 
     private final String sortField;
 

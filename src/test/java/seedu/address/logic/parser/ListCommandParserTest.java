@@ -40,5 +40,27 @@ public class ListCommandParserTest {
                 " " + PREFIX_SORT + "Name",
                 new ListCommand("name"));
     }
+
+    @Test
+    public void parse_validSortVisit_success() {
+        assertParseSuccess(parser,
+                " " + PREFIX_SORT + "visit",
+                new ListCommand("visit"));
+    }
+
+    @Test
+    public void parse_caseInsensitiveSortVisit_success() {
+        assertParseSuccess(parser,
+                " " + PREFIX_SORT + "Visit",
+                new ListCommand("visit"));
+    }
+
+    @Test
+    public void parse_invalidSortField_failure() {
+        assertParseFailure(parser,
+                " " + PREFIX_SORT + "date",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+    }
 }
+
 

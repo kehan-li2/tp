@@ -37,12 +37,26 @@ public class ListCommandTest {
         assertCommandSuccess(new ListCommand(), model, ListCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
-    //Add test for Sorting List by names
     @Test
     public void execute_listSortedByName_success() {
         ListCommand command = new ListCommand("name");
 
+        expectedModel.sortFilteredPersonList("name");
+
         assertCommandSuccess(command, model,
-                String.format(ListCommand.MESSAGE_SORT_SUCCESS, "name"), model);
+                String.format(ListCommand.MESSAGE_SORT_SUCCESS, "name"),
+                expectedModel);
     }
+
+    @Test
+    public void execute_listSortedByVisit_success() {
+        ListCommand command = new ListCommand("visit");
+
+        expectedModel.sortFilteredPersonList("visit");
+
+        assertCommandSuccess(command, model,
+                String.format(ListCommand.MESSAGE_SORT_SUCCESS, "visit"),
+                expectedModel);
+    }
+
 }

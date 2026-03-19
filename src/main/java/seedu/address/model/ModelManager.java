@@ -158,10 +158,18 @@ public class ModelManager implements Model {
             comparator = Comparator.comparing(p -> p.getName().fullName.toLowerCase());
             break;
 
+        case "visit":
+            comparator = Comparator.comparing(
+                    p -> p.getVisitDateTime().isPresent()
+                            ? p.getVisitDateTime().value
+                            : null,
+                    Comparator.nullsLast(Comparator.naturalOrder())
+            );
+            break;
+
         default:
             return;
         }
-
         sortedPersons.setComparator(comparator);
     }
 
@@ -170,3 +178,4 @@ public class ModelManager implements Model {
         sortedPersons.setComparator(null);
     }
 }
+

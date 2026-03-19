@@ -12,6 +12,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class ListCommandParser implements Parser<ListCommand> {
 
     private static final String SORT_BY_NAME = "name";
+    private static final String SORT_BY_VISIT = "visit";
 
     /**
      * Parses the given {@code String} of arguments in the context of the ListCommand
@@ -29,7 +30,9 @@ public class ListCommandParser implements Parser<ListCommand> {
                 .map(String::toLowerCase)
                 .orElse("");
 
-        if (!sortField.isEmpty() && !SORT_BY_NAME.equals(sortField)) {
+        if (!sortField.isEmpty()
+                && !SORT_BY_NAME.equals(sortField)
+                && !SORT_BY_VISIT.equals(sortField)) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         }
@@ -37,5 +40,6 @@ public class ListCommandParser implements Parser<ListCommand> {
         return new ListCommand(sortField);
     }
 }
+
 
 

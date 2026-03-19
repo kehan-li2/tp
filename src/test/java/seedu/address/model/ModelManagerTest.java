@@ -16,7 +16,9 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
 import seedu.address.testutil.AddressBookBuilder;
+import seedu.address.testutil.PersonBuilder;
 
 public class ModelManagerTest {
 
@@ -161,4 +163,34 @@ public class ModelManagerTest {
         assertEquals(ALICE, model.getFilteredPersonList().get(1));
     }
 
+    @Test
+    public void sortFilteredPersonList_sortByVisit_success() {
+        Person personWithLaterVisit = new PersonBuilder(ALICE)
+                .withVisitDateTime("2026-01-01 10:00")
+                .build();
+
+        Person personWithEarlierVisit = new PersonBuilder(BENSON)
+                .withVisitDateTime("2025-01-01 10:00")
+                .build();
+
+        Person personWithoutVisit = new PersonBuilder()
+                .withName("No Visit")
+                .build();
+
+        AddressBook addressBook = new AddressBookBuilder()
+                .withPerson(personWithLaterVisit)
+                .withPerson(personWithoutVisit)
+                .withPerson(personWithEarlierVisit)
+                .build();
+
+        ModelManager model = new ModelManager(addressBook, new UserPrefs());
+
+        model.sortFilteredPersonList("visit");
+
+        assertEquals(personWithEarlierVisit, model.getFilteredPersonList().get(0));
+        assertEquals(personWithLaterVisit, model.getFilteredPersonList().get(1));
+        assertEquals(personWithoutVisit, model.getFilteredPersonList().get(2));
+    }
+
 }
+
