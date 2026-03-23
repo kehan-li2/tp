@@ -1,10 +1,12 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_NONEXISTENCE_INDEX;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -30,6 +32,7 @@ public class DeleteCommand extends Command {
     private final List<Index> targetIndexes;
 
     public DeleteCommand(List<Index> targetIndexes) {
+        requireNonNull(targetIndexes);
         this.targetIndexes = Collections.unmodifiableList(new ArrayList<>(targetIndexes));
     }
 
@@ -50,29 +53,30 @@ public class DeleteCommand extends Command {
         if (!invalidIndexes.isEmpty()) {
             String joined = invalidIndexes.stream()
                     .map(String::valueOf)
-                    .reduce((a, b) -> a + ", " + b)
-                    .orElse("");
+                    .collect(Collectors.joining(", "));
 
             throw new CommandException(
-                    "Invalid index: " + joined + ". \nPerson does not exist in current list."
+                    String.format(MESSAGE_NONEXISTENCE_INDEX, joined)
             );
         }
 
         // Sort descending to prevent index shifting issues
         List<Index> sortedIndexes = new ArrayList<>(targetIndexes);
-        sortedIndexes.sort((a, b) -> b.getZeroBased() - a.getZeroBased());
+        sortedIndexes.sort((a, b) -> Integer.compare(b.getZeroBased(), a.getZeroBased()));
 
-        StringBuilder deletedPersons = new StringBuilder();
+        StringBuilder deletedPersonsMessage = new StringBuilder();
 
-        // Perform deletion
         for (Index index : sortedIndexes) {
+            if (deletedPersonsMessage.length() > 0) {
+                deletedPersonsMessage.append("\n");
+            }
             Person personToDelete = lastShownList.get(index.getZeroBased());
             model.deletePerson(personToDelete);
-            deletedPersons.append(Messages.format(personToDelete)).append("\n");
+            deletedPersonsMessage.append(Messages.format(personToDelete));
         }
 
         return new CommandResult(
-                String.format(MESSAGE_DELETE_PERSONS_SUCCESS, deletedPersons)
+                String.format(MESSAGE_DELETE_PERSONS_SUCCESS, deletedPersonsMessage)
         );
     }
 

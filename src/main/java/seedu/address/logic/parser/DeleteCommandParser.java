@@ -22,7 +22,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             return new DeleteCommand(indexes);
         } catch (ParseException pe) {
             throw new ParseException(
-                    pe.getMessage() + "\n\n" + DeleteCommand.MESSAGE_USAGE, pe);
+                    pe.getMessage() + "\n" + DeleteCommand.MESSAGE_USAGE);
         }
     }
 
