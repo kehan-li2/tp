@@ -20,6 +20,9 @@ import seedu.address.logic.commands.TagCommand;
  */
 final class HelpContentProvider {
 
+    private static final String PARAMETERS_SECTION_HEADER = "Parameters:";
+    private static final String EXAMPLES_SECTION_HEADER = "\nExample:";
+
     private static final List<HelpCommandSpec> COMMAND_SPECS = List.of(
             new HelpCommandSpec(AddCommand.COMMAND_WORD, AddCommand.MESSAGE_USAGE),
             new HelpCommandSpec(EditCommand.COMMAND_WORD, EditCommand.MESSAGE_USAGE),
@@ -33,7 +36,7 @@ final class HelpContentProvider {
             new HelpCommandSpec(ExitCommand.COMMAND_WORD, "Usage: " + ExitCommand.COMMAND_WORD)
     );
 
-    List<HelpSection> getHelpSections() {
+    static List<HelpSection> getHelpSections() {
         return COMMAND_SPECS.stream()
                 .map(HelpContentProvider::toHelpSection)
                 .toList();
@@ -44,9 +47,9 @@ final class HelpContentProvider {
         return new HelpSection(commandSpec.commandWord(), parsed.description(), parsed.usage(), parsed.examples());
     }
 
-    static ParsedHelpText parseHelpText(String usageAndExamples) {
+    private static ParsedHelpText parseHelpText(String usageAndExamples) {
         ParsedHelpText baseText = splitExamples(usageAndExamples);
-        int parametersIndex = baseText.usage().indexOf("Parameters:");
+        int parametersIndex = baseText.usage().indexOf(PARAMETERS_SECTION_HEADER);
 
         if (parametersIndex < 0) {
             return baseText;
@@ -59,9 +62,9 @@ final class HelpContentProvider {
         return new ParsedHelpText(descriptionText, usageText, baseText.examples());
     }
 
-    static ParsedHelpText splitExamples(String usageAndExamples) {
+    private static ParsedHelpText splitExamples(String usageAndExamples) {
         requireNonNull(usageAndExamples);
-        int firstExampleIndex = usageAndExamples.indexOf("\nExample:");
+        int firstExampleIndex = usageAndExamples.indexOf(EXAMPLES_SECTION_HEADER);
         if (firstExampleIndex < 0) {
             return new ParsedHelpText("", usageAndExamples.trim(), "");
         }
@@ -71,7 +74,7 @@ final class HelpContentProvider {
         return new ParsedHelpText("", usageWithoutExamples, examplesText);
     }
 
-    static String extractDescription(String descriptionPrefix) {
+    private static String extractDescription(String descriptionPrefix) {
         requireNonNull(descriptionPrefix);
         int colonIndex = descriptionPrefix.indexOf(':');
         if (colonIndex >= 0) {
@@ -95,4 +98,3 @@ final class HelpContentProvider {
 
     record HelpSection(String commandWord, String description, String usage, String examples) {}
 }
-

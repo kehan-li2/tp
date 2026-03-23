@@ -1,7 +1,5 @@
 package seedu.address.ui;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.logging.Logger;
 
 import javafx.animation.PauseTransition;
@@ -28,6 +26,17 @@ public class HelpWindow extends UiPart<Stage> {
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";
 
+    // CSS Style Class Names
+    private static final String CSS_CLASS_COMMAND_NAME = "help-command-name";
+    private static final String CSS_CLASS_DESCRIPTION = "help-description";
+    private static final String CSS_CLASS_CODE_BLOCK = "help-code-block";
+    private static final String CSS_CLASS_CODE_BLOCK_USAGE = "help-code-block-usage";
+    private static final String CSS_CLASS_CODE_BLOCK_EXAMPLE = "help-code-block-example";
+    private static final String CSS_CLASS_COMMAND_BOX = "help-command-box";
+
+    // Layout Constants
+    private static final int COMMAND_BOX_SPACING = 5;
+
     @FXML
     private Button copyButton;
 
@@ -37,31 +46,15 @@ public class HelpWindow extends UiPart<Stage> {
     @FXML
     private VBox commandContainer;
 
-    private final HelpContentProvider helpContentProvider;
     private final PauseTransition copyFeedbackReset = new PauseTransition(Duration.seconds(1.2));
 
     /**
      * Creates a new HelpWindow with a specified Stage.
-     * Delegates to the fully-parameterized constructor with a default HelpContentProvider.
-     * Use this constructor for normal application usage.
      *
      * @param root Stage to use as the root of the HelpWindow.
      */
     public HelpWindow(Stage root) {
-        this(root, new HelpContentProvider());
-    }
-
-    /**
-     * Internal constructor that fully initializes the HelpWindow.
-     * This constructor performs the actual initialization and is package-private
-     * to allow for dependency injection during testing (e.g., injecting a mock HelpContentProvider).
-     *
-     * @param root Stage to use as the root of the HelpWindow.
-     * @param helpContentProvider Provider for help content sections. Must not be null.
-     */
-    HelpWindow(Stage root, HelpContentProvider helpContentProvider) {
         super(FXML, root);
-        this.helpContentProvider = requireNonNull(helpContentProvider);
         helpMessage.setText(HELP_MESSAGE);
         copyButton.setText(COPY_BUTTON_DEFAULT_TEXT);
         copyButton.setOnAction(event -> copyUrl());
@@ -145,7 +138,7 @@ public class HelpWindow extends UiPart<Stage> {
         commandContainer.getChildren().clear();
         commandContainer.setFillWidth(true);
 
-        for (HelpContentProvider.HelpSection helpSection : helpContentProvider.getHelpSections()) {
+        for (HelpContentProvider.HelpSection helpSection : HelpContentProvider.getHelpSections()) {
             addCommandSection(helpSection);
         }
     }
@@ -167,13 +160,13 @@ public class HelpWindow extends UiPart<Stage> {
 
     private Label createCommandNameLabel(String commandName) {
         Label nameLabel = new Label(commandName.toUpperCase());
-        nameLabel.getStyleClass().add("help-command-name");
+        nameLabel.getStyleClass().add(CSS_CLASS_COMMAND_NAME);
         return nameLabel;
     }
 
     private Label createDescriptionLabel(String description) {
         Label descriptionLabel = new Label(description);
-        descriptionLabel.getStyleClass().add("help-description");
+        descriptionLabel.getStyleClass().add(CSS_CLASS_DESCRIPTION);
         descriptionLabel.setWrapText(true);
         descriptionLabel.setManaged(!description.isEmpty());
         descriptionLabel.setVisible(!description.isEmpty());
@@ -181,16 +174,16 @@ public class HelpWindow extends UiPart<Stage> {
     }
 
     private Label createUsageBlockLabel(String text) {
-        return createCodeBlockLabel(text, "help-code-block-usage");
+        return createCodeBlockLabel(text, CSS_CLASS_CODE_BLOCK_USAGE);
     }
 
     private Label createExampleBlockLabel(String text) {
-        return createCodeBlockLabel(text, "help-code-block-example");
+        return createCodeBlockLabel(text, CSS_CLASS_CODE_BLOCK_EXAMPLE);
     }
 
     private Label createCodeBlockLabel(String text, String variantStyleClass) {
         Label codeBlockLabel = new Label(text);
-        codeBlockLabel.getStyleClass().add("help-code-block");
+        codeBlockLabel.getStyleClass().add(CSS_CLASS_CODE_BLOCK);
         codeBlockLabel.getStyleClass().add(variantStyleClass);
         codeBlockLabel.setWrapText(true);
         codeBlockLabel.setMaxWidth(Double.MAX_VALUE);
@@ -200,8 +193,8 @@ public class HelpWindow extends UiPart<Stage> {
     }
 
     private VBox createCommandBox(Label nameLabel, Label descriptionLabel, Label usageLabel, Label examplesLabel) {
-        VBox commandBox = new VBox(5);
-        commandBox.getStyleClass().add("help-command-box");
+        VBox commandBox = new VBox(COMMAND_BOX_SPACING);
+        commandBox.getStyleClass().add(CSS_CLASS_COMMAND_BOX);
         commandBox.setMaxWidth(Double.MAX_VALUE);
         commandBox.getChildren().addAll(nameLabel, descriptionLabel, usageLabel, examplesLabel);
         return commandBox;
