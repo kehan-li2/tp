@@ -103,7 +103,8 @@ public class PersonTest {
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress()
-                + ", note=" + ALICE.getNote() + ", tags=" + ALICE.getTags() + "}";
+                + ", note=" + ALICE.getNote() + ", tags=" + ALICE.getTags()
+                + ", isArchived=" + ALICE.isArchived() + "}";
         assertEquals(expected, ALICE.toString());
     }
 
@@ -133,6 +134,7 @@ public class PersonTest {
                 + ", note=" + aliceWithVisitDateTime.getNote()
                 + ", tags=" + aliceWithVisitDateTime.getTags()
                 + ", visitDateTime=" + aliceWithVisitDateTime.getVisitDateTime()
+                + ", isArchived=" + aliceWithVisitDateTime.isArchived()
                 + "}";
 
         assertEquals(expected, aliceWithVisitDateTime.toString());
