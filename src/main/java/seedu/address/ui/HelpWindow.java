@@ -142,16 +142,16 @@ public class HelpWindow extends UiPart<Stage> {
         commandContainer.setPadding(new Insets(10));
         commandContainer.setFillWidth(true);
 
-        addCommandSection("add", AddCommand.MESSAGE_USAGE);
-        addCommandSection("edit", EditCommand.MESSAGE_USAGE);
-        addCommandSection("delete", DeleteCommand.MESSAGE_USAGE);
-        addCommandSection("list", ListCommand.MESSAGE_USAGE);
-        addCommandSection("find", FindCommand.MESSAGE_USAGE);
-        addCommandSection("tag", TagCommand.MESSAGE_USAGE);
-        addCommandSection("note", NoteCommand.MESSAGE_USAGE);
-        addCommandSection("clear", "Usage: " + ClearCommand.COMMAND_WORD);
-        addCommandSection("help", "Usage: " + HelpCommand.COMMAND_WORD);
-        addCommandSection("exit", "Usage: " + ExitCommand.COMMAND_WORD);
+        addCommandSection(AddCommand.COMMAND_WORD, AddCommand.MESSAGE_USAGE);
+        addCommandSection(EditCommand.COMMAND_WORD, EditCommand.MESSAGE_USAGE);
+        addCommandSection(DeleteCommand.COMMAND_WORD, DeleteCommand.MESSAGE_USAGE);
+        addCommandSection(ListCommand.COMMAND_WORD, ListCommand.MESSAGE_USAGE);
+        addCommandSection(FindCommand.COMMAND_WORD, FindCommand.MESSAGE_USAGE);
+        addCommandSection(TagCommand.COMMAND_WORD, TagCommand.MESSAGE_USAGE);
+        addCommandSection(NoteCommand.COMMAND_WORD, NoteCommand.MESSAGE_USAGE);
+        addCommandSection(ClearCommand.COMMAND_WORD, "Usage: " + ClearCommand.COMMAND_WORD);
+        addCommandSection(HelpCommand.COMMAND_WORD, "Usage: " + HelpCommand.COMMAND_WORD);
+        addCommandSection(ExitCommand.COMMAND_WORD, "Usage: " + ExitCommand.COMMAND_WORD);
     }
 
     /**
@@ -173,13 +173,13 @@ public class HelpWindow extends UiPart<Stage> {
 
     private Label createCommandNameLabel(String commandName) {
         Label nameLabel = new Label(commandName.toUpperCase());
-        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: #4db8ff;");
+        nameLabel.getStyleClass().add("help-command-name");
         return nameLabel;
     }
 
     private Label createDescriptionLabel(String description) {
         Label descriptionLabel = new Label(description);
-        descriptionLabel.setStyle("-fx-text-fill: #e0e0e0; -fx-font-size: 15;");
+        descriptionLabel.getStyleClass().add("help-description");
         descriptionLabel.setWrapText(true);
         descriptionLabel.setManaged(!description.isEmpty());
         descriptionLabel.setVisible(!description.isEmpty());
@@ -230,8 +230,8 @@ public class HelpWindow extends UiPart<Stage> {
 
     private Label createCodeBlockLabel(String text, String textColor) {
         Label codeBlockLabel = new Label(text);
-        codeBlockLabel.setStyle("-fx-text-fill: " + textColor + "; -fx-font-family: 'Courier New'; "
-                + "-fx-font-size: 15; -fx-background-color: #2a2a2a; -fx-padding: 10;");
+        codeBlockLabel.getStyleClass().add("help-code-block");
+        codeBlockLabel.setStyle("-help-code-color: " + textColor + ";");
         codeBlockLabel.setWrapText(true);
         codeBlockLabel.setMaxWidth(Double.MAX_VALUE);
         codeBlockLabel.setManaged(!text.isEmpty());
@@ -241,7 +241,7 @@ public class HelpWindow extends UiPart<Stage> {
 
     private VBox createCommandBox(Label nameLabel, Label descriptionLabel, Label usageLabel, Label examplesLabel) {
         VBox commandBox = new VBox(5);
-        commandBox.setStyle("-fx-border-color: #4db8ff; -fx-border-width: 0 0 0 4; -fx-padding: 12;");
+        commandBox.getStyleClass().add("help-command-box");
         commandBox.setMaxWidth(Double.MAX_VALUE);
         commandBox.getChildren().addAll(nameLabel, descriptionLabel, usageLabel, examplesLabel);
         return commandBox;

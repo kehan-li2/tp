@@ -57,3 +57,29 @@
     -fx-spacing: 20;
 }
 
+.help-command-box {
+    -fx-border-color: #4db8ff;
+    -fx-border-width: 0 0 0 4;
+    -fx-padding: 12;
+}
+
+.help-command-name {
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-text-fill: #4db8ff;
+}
+
+.help-description {
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 15;
+}
+
+.help-code-block {
+    -help-code-color: #9ad0ff;
+    -fx-text-fill: -help-code-color;
+    -fx-font-family: "Courier New";
+    -fx-font-size: 15;
+    -fx-background-color: #2a2a2a;
+    -fx-padding: 10;
+}
+
