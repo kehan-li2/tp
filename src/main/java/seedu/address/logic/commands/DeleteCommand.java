@@ -31,6 +31,11 @@ public class DeleteCommand extends Command {
 
     private final List<Index> targetIndexes;
 
+    /**
+     * Creates a DeleteCommand to delete one or more persons at the specified indexes.
+     *
+     * @param targetIndexes list of indexes of persons to be deleted
+     */
     public DeleteCommand(List<Index> targetIndexes) {
         requireNonNull(targetIndexes);
         this.targetIndexes = Collections.unmodifiableList(new ArrayList<>(targetIndexes));
@@ -102,3 +107,4 @@ public class DeleteCommand extends Command {
                 .toString();
     }
 }
+
