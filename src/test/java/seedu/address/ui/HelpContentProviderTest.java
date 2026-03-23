@@ -192,6 +192,12 @@ public class HelpContentProviderTest {
     }
 
     @Test
+    public void extractDescription_singleColonOnly_returnsEmptyString() throws Exception {
+        String result = invokeExtractDescription(":");
+        assertEquals("", result);
+    }
+
+    @Test
     public void constructor_privateConstructor_throwsAssertionError() throws Exception {
         var ctor = HelpContentProvider.class.getDeclaredConstructor();
         ctor.setAccessible(true);
