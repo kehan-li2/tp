@@ -36,6 +36,10 @@ final class HelpContentProvider {
             new HelpCommandSpec(ExitCommand.COMMAND_WORD, "Usage: " + ExitCommand.COMMAND_WORD)
     );
 
+    private HelpContentProvider() {
+        throw new AssertionError("Utility class should not be instantiated");
+    }
+
     static List<HelpSection> getHelpSections() {
         return COMMAND_SPECS.stream()
                 .map(HelpContentProvider::toHelpSection)

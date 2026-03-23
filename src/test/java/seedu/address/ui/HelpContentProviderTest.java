@@ -3,8 +3,11 @@ package seedu.address.ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -172,5 +175,35 @@ public class HelpContentProviderTest {
         assertEquals(AddCommand.COMMAND_WORD, sections.get(0).commandWord());
         assertEquals(ListCommand.COMMAND_WORD, sections.get(3).commandWord());
         assertEquals(ExitCommand.COMMAND_WORD, sections.get(sections.size() - 1).commandWord());
+    }
+
+    @Test
+    public void extractDescription_colonWithTrailingText_returnsTrimmedSuffix() throws Exception {
+        // Covers line 80 (if colon exists) and line 81 (has chars after colon)
+        String result = invokeExtractDescription("add:   description text   ");
+        assertEquals("description text", result);
+    }
+
+    @Test
+    public void extractDescription_colonAtEnd_returnsEmptyString() throws Exception {
+        // Covers line 80 (if colon exists) and line 84 (colon at end branch)
+        String result = invokeExtractDescription("add:");
+        assertEquals("", result);
+    }
+
+    @Test
+    public void constructor_privateConstructor_throwsAssertionError() throws Exception {
+        var ctor = HelpContentProvider.class.getDeclaredConstructor();
+        ctor.setAccessible(true);
+
+        InvocationTargetException ex =
+                assertThrows(InvocationTargetException.class, ctor::newInstance);
+        assertTrue(ex.getCause() instanceof AssertionError);
+    }
+
+    private static String invokeExtractDescription(String input) throws Exception {
+        Method method = HelpContentProvider.class.getDeclaredMethod("extractDescription", String.class);
+        method.setAccessible(true);
+        return (String) method.invoke(null, input);
     }
 }
