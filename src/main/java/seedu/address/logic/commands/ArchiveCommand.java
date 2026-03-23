@@ -41,6 +41,7 @@ public class ArchiveCommand extends Command {
 
         Person personToArchive = lastShownList.get(targetIndex.getZeroBased());
         model.archivePerson(personToArchive);
+        model.updateFilteredPersonList(p -> !p.isArchived());
         return new CommandResult(String.format(MESSAGE_ARCHIVE_PERSON_SUCCESS, Messages.format(personToArchive)));
     }
 
