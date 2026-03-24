@@ -24,6 +24,7 @@ public class UnarchiveCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_UNARCHIVE_PERSON_SUCCESS = "Unarchived: %1$s";
+    public static final String MESSAGE_UNARCHIVE_PERSON_UNSUCCESS = "%1$s is not archived";
 
     private final Index targetIndex;
 
@@ -43,6 +44,12 @@ public class UnarchiveCommand extends Command {
 
         Person personToUnarchive = archivedList.get(targetIndex.getZeroBased());
 
+        if (!personToUnarchive.isArchived()) {
+            return new CommandResult(
+                    String.format(MESSAGE_UNARCHIVE_PERSON_UNSUCCESS,
+                            personToUnarchive.getName())
+            );
+        }
         model.unarchivePerson(personToUnarchive);
 
         // Refresh view to show only active persons again
