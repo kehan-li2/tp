@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -55,6 +56,31 @@ public class UnarchiveCommandTest {
     }
 
     @Test
+    public void execute_multipleArchivedPersons_refreshShowsOnlyActivePersons() {
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        model.archivePerson(firstPerson);
+        model.archivePerson(secondPerson);
+        model.updateFilteredPersonList(Person::isArchived);
+
+        UnarchiveCommand unarchiveCommand = new UnarchiveCommand(INDEX_FIRST_PERSON);
+
+        Person personToUnarchive = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String expectedMessage = String.format(
+                UnarchiveCommand.MESSAGE_UNARCHIVE_PERSON_SUCCESS,
+                Messages.format(personToUnarchive));
+
+        Model expectedModel = new ModelManager(getDeepCopiedAddressBook(model), new UserPrefs());
+        expectedModel.updateFilteredPersonList(Person::isArchived);
+        Person expectedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        expectedModel.unarchivePerson(expectedPerson);
+        expectedModel.updateFilteredPersonList(p -> !p.isArchived());
+
+        assertCommandSuccess(unarchiveCommand, model, expectedMessage, expectedModel);
+        assertFalse(model.getFilteredPersonList().stream().anyMatch(Person::isArchived));
+    }
+
+    @Test
     public void execute_invalidIndexArchivedList_throwsCommandException() {
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         model.archivePerson(firstPerson);
@@ -88,8 +114,8 @@ public class UnarchiveCommandTest {
 
         assertEquals(firstCommand, firstCommand);
         assertEquals(firstCommand, new UnarchiveCommand(INDEX_FIRST_PERSON));
-        assertNotEquals(null, firstCommand);
-        assertNotEquals(1, firstCommand);
+        assertFalse(firstCommand.equals(null));
+        assertFalse(firstCommand.equals(1));
         assertNotEquals(firstCommand, secondCommand);
     }
 
