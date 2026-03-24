@@ -45,7 +45,7 @@ public class PersonBuilder {
         note = new Note(DEFAULT_NOTE);
         tags = new HashSet<>();
         visitDateTime = new VisitDateTime();
-        isArchived = false;
+        isArchived = DEFAULT_IS_ARCHIVED;
     }
 
     /**
