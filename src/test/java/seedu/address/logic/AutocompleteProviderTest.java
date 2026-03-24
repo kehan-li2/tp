@@ -97,7 +97,6 @@ public class AutocompleteProviderTest {
         assertTrue(AutocompleteProvider.suggestCompletion("tag ").isEmpty());
         assertEquals("tag 1 at/", AutocompleteProvider.suggestCompletion("tag 1").orElseThrow());
         assertEquals("tag 1 dt/", AutocompleteProvider.suggestCompletion("tag 1 d").orElseThrow());
-        assertTrue(AutocompleteProvider.suggestCompletion("tag 1 at/friend dt/work ").isEmpty());
     }
 
     @Test
@@ -241,7 +240,14 @@ public class AutocompleteProviderTest {
 
     @Test
     public void suggestCompletion_tagWithBothPrefixes_noSuggestion() {
-        assertTrue(AutocompleteProvider.suggestCompletion("tag 1 at/friend dt/work ").isEmpty());
+        assertEquals("tag 1 at/client dt/service at/",
+                AutocompleteProvider.suggestCompletion("tag 1 at/client dt/service ").orElseThrow());
+    }
+
+    @Test
+    public void suggestCompletion_tagWithBothPrefixesAndPartialRepeatablePrefix_suggestsMatchingRepeatablePrefix() {
+        assertEquals("tag 1 at/client dt/service dt/",
+                AutocompleteProvider.suggestCompletion("tag 1 at/client dt/service d").orElseThrow());
     }
 
     @Test

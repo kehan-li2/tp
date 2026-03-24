@@ -73,7 +73,7 @@ public final class AutocompleteProvider {
                     Set.of()),
             TagCommand.COMMAND_WORD, new AutocompletePrefixConfig(true,
                     List.of(PREFIX_ADD_TAG.getPrefix(), PREFIX_DELETE_TAG.getPrefix()),
-                    Set.of())
+                    Set.of(PREFIX_ADD_TAG.getPrefix(), PREFIX_DELETE_TAG.getPrefix()))
     );
 
     private AutocompleteProvider() {}
