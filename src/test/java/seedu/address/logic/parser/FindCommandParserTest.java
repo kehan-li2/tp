@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -8,6 +9,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.TagContainsPredicate;
@@ -46,6 +48,18 @@ public class FindCommandParserTest {
     public void parse_missingPrefix_throwsParseException() {
         assertParseFailure(parser, "find Alice Bob",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_bothNameAndTagPrefixes_throwsParseException() {
+        assertParseFailure(parser, "find n/Alice t/friends",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_duplicateNamePrefix_throwsParseException() {
+        assertParseFailure(parser, "find n/Alice n/Bob",
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
     }
 
 
