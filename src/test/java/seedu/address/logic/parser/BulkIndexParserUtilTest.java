@@ -83,6 +83,12 @@ public class BulkIndexParserUtilTest {
     }
 
     @Test
+    public void parseBulkIndexes_rangeWithZero_throwsParseException() {
+        assertThrows(ParseException.class, Messages.MESSAGE_INVALID_INDEX, () ->
+                BulkIndexParserUtil.parseBulkIndexes("1-0"));
+    }
+
+    @Test
     public void parseBulkIndexes_malformedRangeToken_throwsParseException() {
         assertThrows(ParseException.class, Messages.MESSAGE_INVALID_TOKEN, () ->
                 BulkIndexParserUtil.parseBulkIndexes("1--3"));
