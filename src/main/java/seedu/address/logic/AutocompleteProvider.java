@@ -108,10 +108,6 @@ public final class AutocompleteProvider {
         String leadingSpaces = userInput.substring(0, leadingSpaceCount);
         String trimmedInput = userInput.stripLeading();
 
-        if (trimmedInput.isBlank()) {
-            return Optional.empty();
-        }
-
         Optional<String> suggestion;
         if (containsWhitespace(trimmedInput)) {
             suggestion = suggestArgumentCompletion(trimmedInput);
@@ -148,7 +144,7 @@ public final class AutocompleteProvider {
         String commandWord = input.substring(0, firstWhitespaceIndex);
 
         AutocompletePrefixConfig config = AUTOCOMPLETE_PREFIX_CONFIGS.get(commandWord);
-        if (config == null || config.prefixes().isEmpty()) {
+        if (config == null) {
             logger.fine("No autocomplete config for command word: " + commandWord);
             return Optional.empty();
         }
@@ -206,7 +202,11 @@ public final class AutocompleteProvider {
     private static Optional<String> nextUnusedPrefix(
             List<String> orderedPrefixes, Set<String> repeatablePrefixes, String args) {
         for (String prefix : orderedPrefixes) {
-            if (!containsPrefixToken(args, prefix) && !repeatablePrefixes.contains(prefix)) {
+            if (repeatablePrefixes.contains(prefix)) {
+                continue;
+            }
+
+            if (!containsPrefixToken(args, prefix)) {
                 return Optional.of(prefix);
             }
         }
