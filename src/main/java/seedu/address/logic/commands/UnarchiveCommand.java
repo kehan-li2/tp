@@ -3,7 +3,9 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -17,15 +19,13 @@ import seedu.address.model.person.Person;
 public class UnarchiveCommand extends Command {
 
     public static final String COMMAND_WORD = "unarchive";
-
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Unarchives the person identified by the index number.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
-
     public static final String MESSAGE_UNARCHIVE_PERSON_SUCCESS = "Unarchived: %1$s";
     public static final String MESSAGE_UNARCHIVE_PERSON_UNSUCCESS = "%1$s is not archived";
-
+    private static final Logger logger = LogsCenter.getLogger(UnarchiveCommand.class);
     private final Index targetIndex;
 
     public UnarchiveCommand(Index targetIndex) {
@@ -34,24 +34,30 @@ public class UnarchiveCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
+        logger.info("Executing unarchive command for index: " + targetIndex);
+        assert targetIndex.getZeroBased() >= 0;
         requireNonNull(model);
 
         List<Person> archivedList = model.getFilteredPersonList();
+        assert archivedList != null;
 
         if (targetIndex.getZeroBased() >= archivedList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Person personToUnarchive = archivedList.get(targetIndex.getZeroBased());
+        logger.fine("Person to unarchive: " + personToUnarchive);
 
         if (!personToUnarchive.isArchived()) {
+            logger.warning("Attempted to unarchive a non-archived person: " + personToUnarchive);
             return new CommandResult(
                     String.format(MESSAGE_UNARCHIVE_PERSON_UNSUCCESS,
                             personToUnarchive.getName())
             );
         }
         model.unarchivePerson(personToUnarchive);
-        assert !personToUnarchive.isArchived();
+
+        logger.info("Successfully unarchived person: " + personToUnarchive);
 
         // Refresh view to show only active persons again
         model.updateFilteredPersonList(p -> !p.isArchived());
@@ -66,11 +72,10 @@ public class UnarchiveCommand extends Command {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof UnarchiveCommand)) {
+        if (!(other instanceof UnarchiveCommand otherUnarchiveCommand)) {
             return false;
         }
 
-        UnarchiveCommand otherUnarchiveCommand = (UnarchiveCommand) other;
         return targetIndex.equals(otherUnarchiveCommand.targetIndex);
     }
 
