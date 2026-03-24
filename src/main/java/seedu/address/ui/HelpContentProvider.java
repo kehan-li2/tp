@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Locale;
 import java.util.List;
 
 import seedu.address.logic.commands.AddCommand;
@@ -53,7 +54,7 @@ final class HelpContentProvider {
 
     private static ParsedHelpText parseHelpText(String usageAndExamples) {
         ParsedHelpText baseText = splitExamples(usageAndExamples);
-        int parametersIndex = baseText.usage().indexOf(PARAMETERS_SECTION_HEADER);
+        int parametersIndex = indexOfIgnoreCase(baseText.usage(), PARAMETERS_SECTION_HEADER);
 
         if (parametersIndex < 0) {
             return baseText;
@@ -66,9 +67,15 @@ final class HelpContentProvider {
         return new ParsedHelpText(descriptionText, usageText, baseText.examples());
     }
 
+    private static int indexOfIgnoreCase(String source, String target) {
+        requireNonNull(source);
+        requireNonNull(target);
+        return source.toLowerCase(Locale.ROOT).indexOf(target.toLowerCase(Locale.ROOT));
+    }
+
     private static ParsedHelpText splitExamples(String usageAndExamples) {
         requireNonNull(usageAndExamples);
-        int firstExampleIndex = usageAndExamples.indexOf(EXAMPLES_SECTION_HEADER);
+        int firstExampleIndex = indexOfIgnoreCase(usageAndExamples, EXAMPLES_SECTION_HEADER);
         if (firstExampleIndex < 0) {
             return new ParsedHelpText("", usageAndExamples.trim(), "");
         }

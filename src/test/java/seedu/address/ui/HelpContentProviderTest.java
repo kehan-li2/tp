@@ -178,6 +178,30 @@ public class HelpContentProviderTest {
     }
 
     @Test
+    public void parseHelpText_lowercaseParametersHeader_parsedCorrectly() throws Exception {
+        HelpContentProvider.ParsedHelpText parsed = invokeParseHelpText(
+                "Adds a person to the address book.\n"
+                        + "parameters: NAME PHONE\n"
+                        + "Example: add n/Alice p/91234567");
+
+        assertEquals("Adds a person to the address book.", parsed.description());
+        assertTrue(parsed.usage().startsWith("parameters:"));
+        assertTrue(parsed.examples().startsWith("Example:"));
+    }
+
+    @Test
+    public void parseHelpText_lowercaseExampleHeader_parsedCorrectly() throws Exception {
+        HelpContentProvider.ParsedHelpText parsed = invokeParseHelpText(
+                "Adds a person to the address book.\n"
+                        + "Parameters: NAME PHONE\n"
+                        + "example: add n/Alice p/91234567");
+
+        assertEquals("Adds a person to the address book.", parsed.description());
+        assertTrue(parsed.usage().startsWith("Parameters:"));
+        assertTrue(parsed.examples().startsWith("example:"));
+    }
+
+    @Test
     public void extractDescription_colonWithTrailingText_returnsTrimmedSuffix() throws Exception {
         // Covers line 80 (if colon exists) and line 81 (has chars after colon)
         String result = invokeExtractDescription("add:   description text   ");
@@ -198,6 +222,19 @@ public class HelpContentProviderTest {
     }
 
     @Test
+    public void extractDescription_withoutColon_returnsTrimmedInput() throws Exception {
+        // Covers the no-colon path for line 84 in HelpContentProvider.extractDescription
+        String result = invokeExtractDescription("   Adds a person to the address book.   ");
+        assertEquals("Adds a person to the address book.", result);
+    }
+
+    @Test
+    public void extractDescription_multipleColons_keepsTextAfterFirstColon() throws Exception {
+        String result = invokeExtractDescription("add: one: two");
+        assertEquals("one: two", result);
+    }
+
+    @Test
     public void constructor_privateConstructor_throwsAssertionError() throws Exception {
         var ctor = HelpContentProvider.class.getDeclaredConstructor();
         ctor.setAccessible(true);
@@ -211,5 +248,11 @@ public class HelpContentProviderTest {
         Method method = HelpContentProvider.class.getDeclaredMethod("extractDescription", String.class);
         method.setAccessible(true);
         return (String) method.invoke(null, input);
+    }
+
+    private static HelpContentProvider.ParsedHelpText invokeParseHelpText(String input) throws Exception {
+        Method method = HelpContentProvider.class.getDeclaredMethod("parseHelpText", String.class);
+        method.setAccessible(true);
+        return (HelpContentProvider.ParsedHelpText) method.invoke(null, input);
     }
 }
