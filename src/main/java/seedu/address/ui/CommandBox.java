@@ -1,5 +1,7 @@
 package seedu.address.ui;
 
+import java.util.logging.Logger;
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -8,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.AutocompleteProvider;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -19,6 +22,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class CommandBox extends UiPart<Region> {
 
     public static final String ERROR_STYLE_CLASS = "error";
+    private static final Logger logger = LogsCenter.getLogger(CommandBox.class);
     private static final String EMPTY_TEXT = "";
     private static final double AUTOCOMPLETE_HINT_OFFSET = 12.0;
     private static final String FXML = "CommandBox.fxml";
@@ -122,6 +126,8 @@ public class CommandBox extends UiPart<Region> {
         return AutocompleteProvider.suggestCompletion(currentInput)
                 .filter(suggestion -> suggestion.length() > currentInput.length())
                 .map(suggestion -> {
+                    logger.fine("Accepted autocomplete suggestion. inputLength="
+                            + currentInput.length() + ", suggestionLength=" + suggestion.length());
                     setCommandText(suggestion);
                     commandTextField.positionCaret(suggestion.length());
                     clearAutocompleteHint();
