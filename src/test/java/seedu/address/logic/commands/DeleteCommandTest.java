@@ -46,6 +46,19 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_emptyIndexList_success() {
+        DeleteCommand command = new DeleteCommand(List.of());
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        String expectedMessage = String.format(
+                DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS, ""
+        );
+
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void execute_validIndexFilteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
