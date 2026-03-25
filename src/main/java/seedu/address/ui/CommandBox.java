@@ -45,20 +45,8 @@ public class CommandBox extends UiPart<Region> {
         commandTextField.textProperty().addListener((unused1, unused2, unused3) -> handleTextChanged());
         commandTextField.caretPositionProperty().addListener((unused1, unused2, unused3) -> updateAutocompleteHint());
         commandTextField.focusedProperty().addListener((unused1, unused2, unused3) -> updateAutocompleteHint());
-        commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, this::handleTabKeyEventFilter);
         commandTextField.setOnKeyPressed(this::handleCommandBoxKeyPress);
         clearAutocompleteHint();
-    }
-
-    private void handleTabKeyEventFilter(KeyEvent event) {
-        if (event.getCode() != KeyCode.TAB) {
-            return;
-        }
-
-        acceptAutocompleteSuggestion();
-        commandTextField.requestFocus();
-        commandTextField.positionCaret(commandTextField.getText().length());
-        event.consume();
     }
 
     /**
@@ -82,18 +70,53 @@ public class CommandBox extends UiPart<Region> {
     }
 
     private void handleCommandBoxKeyPress(KeyEvent event) {
-        String recalled;
-
-        if (event.getCode() == KeyCode.UP) {
-            recalled = commandHistory.navigateUp();
-        } else if (event.getCode() == KeyCode.DOWN) {
-            recalled = commandHistory.navigateDown();
-        } else {
+        if (event.getCode() != KeyCode.UP
+                && event.getCode() != KeyCode.DOWN && event.getCode() != KeyCode.TAB) {
             return;
         }
 
+        if (event.getCode() == KeyCode.TAB) {
+            handleTabKeyEvent(event);
+        } else if (event.getCode() == KeyCode.UP) {
+            handleUpKeyEvent(event);
+        } else if (event.getCode() == KeyCode.DOWN) {
+            handleDownKeyEvent(event);
+        }
+    }
+
+    private void handleUpKeyEvent(KeyEvent event) {
+        if (event.getCode() != KeyCode.UP) {
+            return;
+        }
+
+        String recalled = commandHistory.navigateUp();
+        fillRecalledCommand(recalled);
+        event.consume();
+    }
+
+    private void handleDownKeyEvent(KeyEvent event) {
+        if (event.getCode() != KeyCode.DOWN) {
+            return;
+        }
+
+        String recalled = commandHistory.navigateDown();
+        fillRecalledCommand(recalled);
+        event.consume();
+    }
+
+    private void fillRecalledCommand(String recalled) {
         setCommandText(recalled);
         commandTextField.positionCaret(recalled.length());
+    }
+
+    private void handleTabKeyEvent(KeyEvent event) {
+        if (event.getCode() != KeyCode.TAB) {
+            return;
+        }
+
+        acceptAutocompleteSuggestion();
+        commandTextField.requestFocus();
+        commandTextField.positionCaret(commandTextField.getText().length());
         event.consume();
     }
 
@@ -146,13 +169,16 @@ public class CommandBox extends UiPart<Region> {
         assert suggestion.startsWith(userInput) : "Autocomplete suggestion must extend user input";
 
         String suffix = suggestion.substring(userInput.length());
-        autocompleteHintLabel.setText(suffix);
-        autocompleteHintLabel.setTranslateX(computeAutocompleteHintOffset(userInput));
+        setHintText(suffix, computeAutocompleteHintOffset(userInput));
     }
 
     private void clearAutocompleteHint() {
-        autocompleteHintLabel.setText(EMPTY_TEXT);
-        autocompleteHintLabel.setTranslateX(AUTOCOMPLETE_HINT_OFFSET);
+        setHintText(EMPTY_TEXT, AUTOCOMPLETE_HINT_OFFSET);
+    }
+
+    private void setHintText(String text, double offset) {
+        autocompleteHintLabel.setText(text);
+        autocompleteHintLabel.setTranslateX(offset);
     }
 
     private double computeAutocompleteHintOffset(String userInput) {
