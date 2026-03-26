@@ -173,7 +173,7 @@ public class ModelManager implements Model {
         case "visit":
             comparator = Comparator.comparing(
                     p -> p.getVisitDateTime().isPresent()
-                            ? p.getVisitDateTime().value
+                            ? p.getVisitDateTime().getValue()
                             : null,
                     Comparator.nullsLast(Comparator.naturalOrder())
             );
@@ -190,4 +190,3 @@ public class ModelManager implements Model {
         sortedPersons.setComparator(null);
     }
 }
-
