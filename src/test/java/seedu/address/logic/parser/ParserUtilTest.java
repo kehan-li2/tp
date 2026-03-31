@@ -309,4 +309,16 @@ public class ParserUtilTest {
         assertThrows(ParseException.class, "usage", () ->
                 ParserUtil.parseSingleIndexOrThrow("abc", "usage"));
     }
+
+    @Test
+    public void parseIndex_zero_throwsParseException() {
+        assertThrows(ParseException.class, MESSAGE_INVALID_INDEX, () ->
+                ParserUtil.parseIndex("0"));
+    }
+
+    @Test
+    public void parseIndex_negative_throwsParseException() {
+        assertThrows(ParseException.class, MESSAGE_INVALID_INDEX, () ->
+                ParserUtil.parseIndex("-1"));
+    }
 }
