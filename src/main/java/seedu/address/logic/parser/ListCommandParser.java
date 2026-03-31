@@ -37,6 +37,13 @@ public class ListCommandParser implements Parser<ListCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         }
 
+        String getExtraVals = argMultimap.getValue(new Prefix("")).toString();
+
+        if (!getExtraVals.isEmpty()) {
+            // Protects from random strings between prefix or when no prefix
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+        }
         return new ListCommand(sortField);
     }
 }
