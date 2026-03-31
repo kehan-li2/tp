@@ -39,6 +39,20 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_namePrefixWithoutValue_throwsParseException() {
+        String expected = String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, " n/", expected);
+        assertParseFailure(parser, " n/   ", expected);
+    }
+
+    @Test
+    public void parse_nameWithExtraSpaces_returnsFindCommand() {
+        FindCommand expected = new FindCommand(
+                new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
+        assertParseSuccess(parser, " n/   Alice   Bob   ", expected);
+    }
+
+    @Test
     public void parse_tagArgs_returnsFindCommand() {
         FindCommand expected =
                 new FindCommand(new TagContainsPredicate("friends"));

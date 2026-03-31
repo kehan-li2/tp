@@ -84,7 +84,6 @@ public class FindCommandParser implements Parser<FindCommand> {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
             }
             List<String> keywords = Arrays.stream(trimmed.split("\\s+"))
-                    .filter(s -> !s.isBlank())
                     .toList();
             return new FindCommand(new NameContainsKeywordsPredicate(keywords));
         } else if (hasTag) {
