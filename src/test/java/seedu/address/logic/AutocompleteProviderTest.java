@@ -187,6 +187,14 @@ public class AutocompleteProviderTest {
         assertFalse(AutocompleteProvider.suggestCompletion("find abc ").isPresent());
     }
 
+    @Test
+    public void suggestCompletion_addWithInvalidTokenBeforeValidPrefix_returnsNoSuggestion() {
+        // EP: invalid non-prefix token appearing before first valid prefix
+        assertTrue(AutocompleteProvider.suggestCompletion("add f p/").isEmpty());
+        assertTrue(AutocompleteProvider.suggestCompletion("add invalid p/123 ").isEmpty());
+        assertTrue(AutocompleteProvider.suggestCompletion("add xyz n/John ").isEmpty());
+    }
+
     // EP Group: Find Command Modes
 
     @Test
@@ -244,6 +252,14 @@ public class AutocompleteProviderTest {
         assertTrue(AutocompleteProvider.suggestCompletion("find n/John t/client ").isEmpty());
     }
 
+    @Test
+    public void suggestCompletion_findWithInvalidTokenBeforeValidPrefix_returnsNoSuggestion() {
+        // EP: invalid non-prefix token appearing before first valid prefix
+        assertTrue(AutocompleteProvider.suggestCompletion("find f n/").isEmpty());
+        assertTrue(AutocompleteProvider.suggestCompletion("find invalid n/John ").isEmpty());
+        assertTrue(AutocompleteProvider.suggestCompletion("find xyz t/client ").isEmpty());
+    }
+
     // EP Group: List, Note, Tag, Edit Prefix Behavior
 
     @Test
@@ -271,6 +287,13 @@ public class AutocompleteProviderTest {
     }
 
     @Test
+    public void suggestCompletion_listWithInvalidTokenBeforeValidPrefix_returnsNoSuggestion() {
+        // EP: invalid non-prefix token appearing before first valid prefix
+        assertTrue(AutocompleteProvider.suggestCompletion("list f s/").isEmpty());
+        assertTrue(AutocompleteProvider.suggestCompletion("list invalid s/name ").isEmpty());
+    }
+
+    @Test
     public void suggestCompletion_edit_requiresIndexBeforePrefixSuggestion() {
         // EP: index-required command blocks prefix suggestions without a valid index
         assertTrue(AutocompleteProvider.suggestCompletion("edit ").isEmpty());
@@ -295,6 +318,14 @@ public class AutocompleteProviderTest {
     public void suggestCompletion_editWithNameAndNoSpace_suggestsSpace() {
         // EP: value token still being typed (no trailing whitespace)
         assertTrue(AutocompleteProvider.suggestCompletion("edit 1 n/Bob").isEmpty());
+    }
+
+    @Test
+    public void suggestCompletion_editWithInvalidTokenBeforeValidPrefix_returnsNoSuggestion() {
+        // EP: invalid non-prefix token appearing before first valid prefix
+        assertTrue(AutocompleteProvider.suggestCompletion("edit 1 f p/").isEmpty());
+        assertTrue(AutocompleteProvider.suggestCompletion("edit 1 invalid p/123 ").isEmpty());
+        assertTrue(AutocompleteProvider.suggestCompletion("edit 1 xyz n/John ").isEmpty());
     }
 
     @Test
@@ -339,6 +370,13 @@ public class AutocompleteProviderTest {
     }
 
     @Test
+    public void suggestCompletion_noteWithInvalidTokenBeforeValidPrefix_returnsNoSuggestion() {
+        // EP: invalid non-prefix token appearing before first valid prefix
+        assertTrue(AutocompleteProvider.suggestCompletion("note 1 f nt/").isEmpty());
+        assertTrue(AutocompleteProvider.suggestCompletion("note 1 invalid nt/hello ").isEmpty());
+    }
+
+    @Test
     public void suggestCompletion_tagWithoutIndex_noSuggestion() {
         // EP: missing required index
         // overlap with suggestCompletion_tag_requiresIndexBeforePrefixSuggestion()
@@ -374,6 +412,14 @@ public class AutocompleteProviderTest {
         // EP: partial repeatable prefix should complete deterministically
         assertEquals("tag 1 at/client dt/service dt/",
                 AutocompleteProvider.suggestCompletion("tag 1 at/client dt/service d").orElseThrow());
+    }
+
+    @Test
+    public void suggestCompletion_tagWithInvalidTokenBeforeValidPrefix_returnsNoSuggestion() {
+        // EP: invalid non-prefix token appearing before first valid prefix
+        assertTrue(AutocompleteProvider.suggestCompletion("tag 1 f at/").isEmpty());
+        assertTrue(AutocompleteProvider.suggestCompletion("tag 1 invalid at/client ").isEmpty());
+        assertTrue(AutocompleteProvider.suggestCompletion("tag 1 xyz dt/service ").isEmpty());
     }
 
     // EP Group: Commands Without Prefix Suggestions

@@ -231,7 +231,42 @@ public final class AutocompleteProvider {
         assert args != null : "hasInvalidFreeTextArgs args must not be null";
         assert prefixes != null : "hasInvalidFreeTextArgs prefixes must not be null";
 
-        return !args.isBlank() && !containsAnyPrefixToken(args, prefixes);
+        if (args.isBlank()) {
+            return false;
+        }
+
+        if (!containsAnyPrefixToken(args, prefixes)) {
+            return true;
+        }
+
+        int firstPrefixIndex = firstPrefixTokenStartIndex(args, prefixes);
+        if (firstPrefixIndex < 0) {
+            return true;
+        }
+
+        return !args.substring(0, firstPrefixIndex).isBlank();
+    }
+
+    private static int firstPrefixTokenStartIndex(String args, List<String> prefixes) {
+        assert args != null : "firstPrefixTokenStartIndex args must not be null";
+        assert prefixes != null : "firstPrefixTokenStartIndex prefixes must not be null";
+
+        int firstIndex = Integer.MAX_VALUE;
+
+        for (String prefix : prefixes) {
+            if (args.startsWith(prefix)) {
+                firstIndex = 0;
+            }
+
+            for (int i = 0; i < args.length() - 1; i++) {
+                if (Character.isWhitespace(args.charAt(i)) && args.startsWith(prefix, i + 1)) {
+                    int index = i + 1;
+                    firstIndex = Math.min(firstIndex, index);
+                }
+            }
+        }
+
+        return firstIndex == Integer.MAX_VALUE ? -1 : firstIndex;
     }
 
     private static Optional<String> completeCurrentToken(
