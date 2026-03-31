@@ -2,12 +2,15 @@ package seedu.address.logic;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADD_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DELETE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_END_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NOTE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SORT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_START_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_VISIT;
 
@@ -20,15 +23,18 @@ import java.util.logging.Logger;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.ArchiveCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.ListArchiveCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.NoteCommand;
 import seedu.address.logic.commands.TagCommand;
+import seedu.address.logic.commands.UnarchiveCommand;
 
 /**
  * Provides context-aware command line autocompletion suggestions.
@@ -40,6 +46,7 @@ public final class AutocompleteProvider {
 
     private static final List<String> COMMAND_WORDS = List.of(
             AddCommand.COMMAND_WORD,
+            ArchiveCommand.COMMAND_WORD,
             ClearCommand.COMMAND_WORD,
             DeleteCommand.COMMAND_WORD,
             EditCommand.COMMAND_WORD,
@@ -47,8 +54,10 @@ public final class AutocompleteProvider {
             FindCommand.COMMAND_WORD,
             HelpCommand.COMMAND_WORD,
             ListCommand.COMMAND_WORD,
+            ListArchiveCommand.COMMAND_WORD,
             NoteCommand.COMMAND_WORD,
-            TagCommand.COMMAND_WORD
+            TagCommand.COMMAND_WORD,
+            UnarchiveCommand.COMMAND_WORD
     );
 
     private static final Map<String, AutocompletePrefixConfig> AUTOCOMPLETE_PREFIX_CONFIGS = Map.of(
@@ -63,17 +72,24 @@ public final class AutocompleteProvider {
                             PREFIX_TAG.getPrefix()),
                     Set.of(PREFIX_TAG.getPrefix())),
             FindCommand.COMMAND_WORD, new AutocompletePrefixConfig(false,
-                    List.of(PREFIX_NAME.getPrefix(), PREFIX_TAG.getPrefix()),
+                    List.of(PREFIX_NAME.getPrefix(), PREFIX_TAG.getPrefix(), PREFIX_DATE.getPrefix(),
+                        PREFIX_START_DATE.getPrefix(), PREFIX_END_DATE.getPrefix()),
                     Set.of()),
             ListCommand.COMMAND_WORD, new AutocompletePrefixConfig(false,
                     List.of(PREFIX_SORT.getPrefix()),
+                    Set.of()),
+                ArchiveCommand.COMMAND_WORD, new AutocompletePrefixConfig(true,
+                    List.of(),
                     Set.of()),
             NoteCommand.COMMAND_WORD, new AutocompletePrefixConfig(true,
                     List.of(PREFIX_NOTE.getPrefix()),
                     Set.of()),
             TagCommand.COMMAND_WORD, new AutocompletePrefixConfig(true,
                     List.of(PREFIX_ADD_TAG.getPrefix(), PREFIX_DELETE_TAG.getPrefix()),
-                    Set.of(PREFIX_ADD_TAG.getPrefix(), PREFIX_DELETE_TAG.getPrefix()))
+                    Set.of(PREFIX_ADD_TAG.getPrefix(), PREFIX_DELETE_TAG.getPrefix())),
+                UnarchiveCommand.COMMAND_WORD, new AutocompletePrefixConfig(true,
+                    List.of(),
+                    Set.of())
     );
 
     private AutocompleteProvider() {}
@@ -120,10 +136,18 @@ public final class AutocompleteProvider {
     }
 
     private static Optional<String> suggestCommandCompletion(String input) {
-        return COMMAND_WORDS.stream()
+        boolean isExactCommand = COMMAND_WORDS.stream().anyMatch(command -> command.equals(input));
+
+        if (isExactCommand) {
+            return COMMAND_WORDS.stream()
                 .filter(command -> command.startsWith(input))
-                .findFirst()
-                .filter(match -> !match.equals(input));
+                .filter(command -> !command.equals(input))
+                .findFirst();
+        }
+
+        return COMMAND_WORDS.stream()
+            .filter(command -> command.startsWith(input))
+            .findFirst();
     }
 
     private static Optional<String> suggestArgumentCompletion(String input) {
@@ -150,12 +174,24 @@ public final class AutocompleteProvider {
         }
 
         if (targetArgs.isEmpty()) {
+            if (config.prefixes().isEmpty()) {
+                return Optional.empty();
+            }
+
             String firstPrefix = config.prefixes().get(0);
             return Optional.of((input.endsWith(" ") ? input : input + " ") + firstPrefix);
         }
 
         String lastToken = lastToken(targetArgs);
+        if (FindCommand.COMMAND_WORD.equals(commandWord)) {
+            return suggestFindPrefixCompletion(input, targetArgs, lastToken, config.prefixes());
+        }
+
         if (lastToken.isEmpty()) {
+            if (!targetArgs.isBlank() && !containsAnyPrefixToken(targetArgs, config.prefixes())) {
+                return Optional.empty();
+            }
+
             Optional<String> nextUnusedPrefix = nextUnusedPrefix(
                     config.prefixes(), config.repeatablePrefixes(), targetArgs);
             if (nextUnusedPrefix.isPresent()) {
@@ -187,6 +223,74 @@ public final class AutocompleteProvider {
         }
 
         return Optional.of(input + match.substring(lastToken.length()));
+    }
+
+    private static Optional<String> suggestFindPrefixCompletion(
+            String input, String args, String lastToken, List<String> prefixes) {
+        String namePrefix = PREFIX_NAME.getPrefix();
+        String tagPrefix = PREFIX_TAG.getPrefix();
+        String datePrefix = PREFIX_DATE.getPrefix();
+        String startDatePrefix = PREFIX_START_DATE.getPrefix();
+        String endDatePrefix = PREFIX_END_DATE.getPrefix();
+
+        boolean hasName = containsPrefixToken(args, namePrefix);
+        boolean hasTag = containsPrefixToken(args, tagPrefix);
+        boolean hasDate = containsPrefixToken(args, datePrefix);
+        boolean hasStartDate = containsPrefixToken(args, startDatePrefix);
+        boolean hasEndDate = containsPrefixToken(args, endDatePrefix);
+
+        // find only allows one mode, except date range mode requires sd/ and ed/ as a pair.
+        if (hasStartDate ^ hasEndDate) {
+            String requiredPairPrefix = hasStartDate ? endDatePrefix : startDatePrefix;
+
+            if (lastToken.isEmpty()) {
+                return Optional.of(input + requiredPairPrefix);
+            }
+
+            if (!containsPrefixToken(args, requiredPairPrefix) && requiredPairPrefix.startsWith(lastToken)) {
+                return Optional.of(input + requiredPairPrefix.substring(lastToken.length()));
+            }
+
+            return Optional.empty();
+        }
+
+        if (hasName || hasTag || hasDate || (hasStartDate && hasEndDate)) {
+            return Optional.empty();
+        }
+
+        if (lastToken.isEmpty()) {
+            if (!args.isBlank() && !containsAnyPrefixToken(args, prefixes)) {
+                return Optional.empty();
+            }
+
+            Optional<String> firstPrefix = prefixes.stream().findFirst();
+            return firstPrefix.map(prefix -> input + prefix);
+        }
+
+        Optional<String> firstMatch = prefixes.stream()
+                .filter(prefix -> prefix.startsWith(lastToken))
+                .findFirst();
+
+        if (firstMatch.isEmpty()) {
+            return Optional.empty();
+        }
+
+        String match = firstMatch.get();
+        if (match.equals(lastToken)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(input + match.substring(lastToken.length()));
+    }
+
+    private static boolean containsAnyPrefixToken(String args, List<String> prefixes) {
+        for (String prefix : prefixes) {
+            if (containsPrefixToken(args, prefix)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static Optional<String> nextUnusedPrefix(
