@@ -17,22 +17,17 @@ public class CommandHistoryTest {
     // EP Group: Input Validity for add()
 
     @Test
-    public void add_nullCommand_notStored() {
-        // EP: null input
+    public void add_invalidInputs_notStored() {
+        // EP: Invalid inputs (null, blank) are not stored
         history.add(null);
         assertEquals(0, history.size());
-    }
-
-    @Test
-    public void add_blankCommand_notStored() {
-        // EP: blank/whitespace-only input
         history.add("  ");
         assertEquals(0, history.size());
     }
 
     @Test
     public void add_validCommand_stored() {
-        // EP: valid non-blank command
+        // EP: Valid non-blank command is stored
         history.add("list");
         assertEquals(1, history.size());
     }
@@ -40,14 +35,9 @@ public class CommandHistoryTest {
     // EP Group: Empty History Navigation
 
     @Test
-    public void navigateUp_emptyHistory_returnsEmpty() {
-        // EP: navigateUp on empty history
+    public void navigate_emptyHistory_returnsEmpty() {
+        // EP: Navigation on empty history returns empty string
         assertEquals("", history.navigateUp());
-    }
-
-    @Test
-    public void navigateDown_emptyHistory_returnsEmpty() {
-        // EP: navigateDown on empty history
         assertEquals("", history.navigateDown());
     }
 
@@ -55,14 +45,14 @@ public class CommandHistoryTest {
 
     @Test
     public void navigateUp_singleEntry_returnsThatEntry() {
-        // EP: single entry in history
+        // EP: Single entry is retrieved by navigateUp
         history.add("list");
         assertEquals("list", history.navigateUp());
     }
 
     @Test
-    public void navigateDown_withoutPriorNavigateUp_returnsEmpty() {
-        // EP: navigateDown at default pointer position (fresh history)
+    public void navigateDown_atDefaultPointerPosition_returnsEmpty() {
+        // EP: NavigateDown at default position (fresh history) returns empty
         history.add("list");
         assertEquals("", history.navigateDown());
     }
@@ -71,7 +61,7 @@ public class CommandHistoryTest {
 
     @Test
     public void navigateUp_multipleEntries_returnsInReverseOrder() {
-        // EP: multiple entries navigate in reverse order
+        // EP: Multiple entries navigate in reverse chronological order
         history.add("cmd1");
         history.add("cmd2");
         history.add("cmd3");
@@ -81,8 +71,8 @@ public class CommandHistoryTest {
     }
 
     @Test
-    public void navigateUp_repeatedAtOldest_returnsOldestEntry() {
-        // Boundary Value: pressing UP at oldest entry stays at oldest
+    public void navigateUp_atOldestEntry_staysAtOldest() {
+        // BV: Repeated navigateUp at oldest entry boundary stays at oldest
         history.add("cmd1");
         history.add("cmd2");
         history.navigateUp(); // "cmd2"
@@ -91,8 +81,8 @@ public class CommandHistoryTest {
     }
 
     @Test
-    public void navigateDown_afterNavigateUpToOldest_returnsNewerThenEmpty() {
-        // EP: navigateDown after reaching oldest entry
+    public void navigateDown_afterNavigateUpSequence_returnsInOrder() {
+        // EP: NavigateDown after reaching oldest entry returns entries in forward order
         history.add("cmd1");
         history.add("cmd2");
         history.add("cmd3");
@@ -101,24 +91,22 @@ public class CommandHistoryTest {
         history.navigateUp(); // "cmd1"
         assertEquals("cmd2", history.navigateDown());
         assertEquals("cmd3", history.navigateDown());
-        // Boundary Value: navigateDown past newest returns empty
-        assertEquals("", history.navigateDown());
     }
 
     @Test
-    public void navigateDown_pastNewest_returnsEmpty() {
-        // Boundary Value: repeated navigateDown past newest stays empty
+    public void navigateDown_pastNewestEntry_returnsEmptyAndStaysEmpty() {
+        // BV: NavigateDown past newest entry boundary returns empty and stays empty
         history.add("list");
         history.navigateUp(); // "list"
-        history.navigateDown(); // past newest -> ""
-        assertEquals("", history.navigateDown());
+        assertEquals("", history.navigateDown()); // past newest
+        assertEquals("", history.navigateDown()); // stays empty
     }
 
     // EP Group: Consecutive Identical Commands (Collapse)
 
     @Test
     public void add_consecutiveIdenticalCommands_collapsedIntoOne() {
-        // EP: multiple consecutive identical commands
+        // EP: Multiple consecutive identical commands are collapsed into single entry
         history.add("list");
         history.add("list");
         history.add("list");
@@ -126,8 +114,8 @@ public class CommandHistoryTest {
     }
 
     @Test
-    public void add_nonConsecutiveIdenticalCommands_bothStored() {
-        // EP: identical commands separated by different command
+    public void add_nonConsecutiveIdenticalCommands_allStored() {
+        // EP: Identical commands separated by different command are stored separately
         history.add("list");
         history.add("list s/name");
         history.add("list");
@@ -135,17 +123,16 @@ public class CommandHistoryTest {
     }
 
     @Test
-    public void navigateUp_withConsecutiveIdenticalCommandsCollapsed_skipsRepeats() {
-        // EP: full collapse scenario with mixed consecutive and non-consecutive duplicates
+    public void add_mixedConsecutiveAndNonConsecutiveDuplicates_collapsesAndStores() {
+        // EP: Mixed scenario: consecutive duplicates collapsed, non-consecutive stored separately
         history.add("list");
         history.add("list");
         history.add("list");
         history.add("list s/name");
         history.add("list");
 
-        // After collapse, history contains: ["list", "list s/name", "list"]
+        // After collapse: ["list", "list s/name", "list"]
         assertEquals(3, history.size());
-
         assertEquals("list", history.navigateUp());
         assertEquals("list s/name", history.navigateUp());
         assertEquals("list", history.navigateUp());
@@ -154,15 +141,15 @@ public class CommandHistoryTest {
     // EP Group: Pointer Reset After Navigation
 
     @Test
-    public void add_afterNavigation_resetsPointer() {
-        // EP: adding command after navigation sequence should reset pointer
+    public void add_afterNavigation_resetsPointerToNewest() {
+        // EP: Adding command after navigation resets pointer to newest entry
         history.add("cmd1");
         history.add("cmd2");
         history.navigateUp(); // "cmd2"
         history.navigateUp(); // "cmd1"
 
         history.add("cmd3");
-        // Pointer should be reset; UP hits newest command first
+        // Pointer reset; navigateUp goes to newest first
         assertEquals("cmd3", history.navigateUp());
     }
 }
