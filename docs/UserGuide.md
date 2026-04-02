@@ -82,7 +82,7 @@ Examples:
 * `help 123` (extra text is ignored)
 
 
-### Adding a person: `add`
+### Adding a person : `add`
 
 Adds a person to the address book.
 
@@ -102,7 +102,7 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe p/61234567 e/betsycrowe@example.com a/Newgate Road #02-01 nt/Prefers email v/2026-12-01 14:00 t/friend t/colleague`
 
-### Archiving a person: `archive`
+### Archiving a person : `archive`
 Archives a person identified by the index number shown in the current list.
 
 Format: `archive INDEX`
@@ -143,6 +143,19 @@ Examples:
 * `list`
 * `list s/name`
 * `list s/visit`
+
+### Listing archived persons : `list-archive`
+Shows a list of all archived persons in the address book.
+
+Format: `list-archive`
+
+* This command does not take any parameters.
+* The displayed list is updated to show archived persons only.
+* If there are no archived persons, an empty list is shown.
+
+Examples:
+* `list-archive`
+* `list-archive 123` (extra text is ignored)
 
 ### Editing a person : `edit`
 
@@ -220,6 +233,25 @@ Examples:
 * If any specified index does not exist, the command will fail and display the invalid index(es).
 * All indexes are validated before deletion. If any index is invalid, **no deletion will occur**.
 
+### Unarchiving a person : `unarchive`
+Unarchives a person identified by the index number shown in the current list.
+
+Format: `unarchive INDEX`
+
+<box type="tip" seamless>
+
+**Tip:** run `list-archive` first, then `unarchive INDEX`.
+</box>
+
+* Unarchives the person at the specified INDEX.
+* The index refers to the index number shown in the displayed person list.
+* The index must be a positive integer 1, 2, 3, ... .
+* If the selected person is not archived, CareSync will show a message indicating that the person is not archived.
+* After a successful unarchive, the displayed list refreshes to show non-archived persons. 
+
+Examples:
+* `list-archive` followed by `unarchive 1` unarchives the 1st person in the archived list.
+* `unarchive 2`
 
 ### Clearing all entries : `clear`
 
@@ -293,4 +325,5 @@ Action     | Format, Examples
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [nt/NOTE] [v/VISIT_DATE_TIME] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List**   | `list [s/FIELD]`<br> e.g., `list s/name`, `list s/visit`
+**List Archive** | `list-archive`
 **Help**   | `help`
