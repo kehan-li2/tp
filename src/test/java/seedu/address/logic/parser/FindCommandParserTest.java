@@ -122,13 +122,13 @@ public class FindCommandParserTest {
                 + PREFIX_END_DATE + "2026-01-01", MESSAGE_INVALID_DATE_RANGE);
     }
 
-        @Test
-        public void parse_invalidDateInRange_throwsParseException() {
+    @Test
+    public void parse_invalidDateInRange_throwsParseException() {
         assertParseFailure(parser, " " + PREFIX_START_DATE + "invalid "
             + PREFIX_END_DATE + "2026-01-01", MESSAGE_DATE_CONSTRAINTS);
         assertParseFailure(parser, " " + PREFIX_START_DATE + "2026-01-01 "
             + PREFIX_END_DATE + "invalid", MESSAGE_DATE_CONSTRAINTS);
-        }
+    }
 
     @Test
     public void parse_missingDateRangePair_throwsParseException() {
