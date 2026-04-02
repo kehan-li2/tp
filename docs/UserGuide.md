@@ -100,8 +100,10 @@ Format: `list [s/FIELD]`
 
 * If no sorting field is provided, all persons are listed in their default order (i.e. the original stored order of contacts).
 * If a sorting field is provided, the list will be sorted accordingly.
+* Sorting is persistent, once a sort is applied, it will be sorted by that specified **field** until `list` is used without any field.
 
-Valid fields:
+
+* Valid fields:
 * `name` — sorts persons alphabetically by name
 * `visit` — sorts persons by visit date/time
 
