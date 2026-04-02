@@ -148,6 +148,10 @@ public final class AutocompleteProvider {
 
         FindPrefixState findState = buildFindPrefixState(args);
 
+        if (hasFindModeConflict(findState)) {
+            return Optional.empty();
+        }
+
         if (findState.hasIncompleteDateRangePair()) {
             return suggestMissingFindRangePair(input, args, lastToken, findState);
         }
@@ -165,6 +169,20 @@ public final class AutocompleteProvider {
         }
 
         return completeCurrentToken(input, lastToken, prefixes, NO_REPEATABLE_PREFIXES, EMPTY_STRING);
+    }
+
+    private static boolean hasFindModeConflict(FindPrefixState findState) {
+        assert findState != null : "hasFindModeConflict findState must not be null";
+
+        if (findState.hasDate()) {
+            return findState.hasName() || findState.hasTag() || findState.hasStartDate() || findState.hasEndDate();
+        }
+
+        if (findState.hasStartDate() || findState.hasEndDate()) {
+            return findState.hasName() || findState.hasTag() || findState.hasDate();
+        }
+
+        return false;
     }
 
     private static FindPrefixState buildFindPrefixState(String args) {
