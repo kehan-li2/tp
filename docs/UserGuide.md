@@ -139,6 +139,7 @@ Format:
 * Dates must be valid, (e.g., 2026-04-31 will be rejected)
 * Use `find d/today` to find persons with visits scheduled for the current date
 * For date ranges, both `sd/` (start date) and `ed/` (end date) prefixes are required
+* `sd/` (start date) should appear before `ed/` (end date)
 * `sd/today` and `ed/today` can be used
 
 Examples:
@@ -169,7 +170,7 @@ Adds or removes specific tags for the specified person. Unlike `edit`, this comm
 Format: `tag INDEX [at/TAG_TO_ADD]…​ [dt/TAG_TO_DELETE]…​`
 
 * Operates on the person at the specified `INDEX`. The index **must be a positive integer** 1, 2, 3, …​
-* Use `at/` prefix to add one or more tags.
+* Use `at/` prefix to add one or more tags. 
 * Use `dt/` prefix to delete one or more tags.
 * Both `at/` and `dt/` can be used together in a single command to add and delete tags simultaneously.
 
@@ -184,6 +185,8 @@ Format: `tag INDEX [at/TAG_TO_ADD]…​ [dt/TAG_TO_DELETE]…​`
 Examples:
 * `tag 1 at/caseid2` adds the tag `caseid2` to the 1st person.
 * `tag 1 dt/client` removes the tag `client` from the 1st person.
+* `tag 1 at/friend at/caseid2` adds the tags `friend` `caseid2` to the 1st person.
+* `tag 1 dt/friend dt/caseid2` removes the tags `friend` `caseid2` from the 1st person.
 * `tag 1 at/client dt/caseid1` adds `client` and removes `caseid1` from the 1st person in a single command.
 
 ### Deleting a person : `delete`
@@ -255,6 +258,8 @@ Action     | Format, Examples
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find n/James Jake` `find d/today`
 **List**   | `list`
+**Note**   | `note INDEX nt/NOTE`<br> e.g., `note 1 nt/Requires wheelchair assistance` (use `nt/` with empty value to clear)
+**Tag**    | `tag INDEX [at/TAG_TO_ADD]…​ [dt/TAG_TO_DELETE]…​`<br> e.g., `tag 1 at/client dt/caseid1`
 **Help**   | `help`
