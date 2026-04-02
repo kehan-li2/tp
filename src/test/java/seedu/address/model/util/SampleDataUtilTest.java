@@ -1,5 +1,6 @@
 package seedu.address.model.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -18,7 +19,7 @@ public class SampleDataUtilTest {
         var tags = SampleDataUtil.getTagSet("client", "caseid1");
 
         assertNotNull(tags);
-        assertTrue(tags.size() == 2);
+        assertEquals(2, tags.size());
     }
 
     @Test
