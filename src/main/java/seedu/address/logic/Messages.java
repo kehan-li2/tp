@@ -30,8 +30,11 @@ public class Messages {
     public static final String MESSAGE_INVALID_RANGE =
             "Invalid range. Start index must be less than or equal to end index.";
 
+    public static final String MESSAGE_RANGE_INDEX_LARGE =
+            "Index specified for range is too large. Please specify a smaller index.";
+
     public static final String MESSAGE_RANGE_TOO_LARGE =
-            "Range too large. Please specify a smaller range.";
+            "Range too large. A range can include at most 100 indices (inclusive of both start and end).";
 
     public static final String MESSAGE_NONEXISTENCE_INDEX =
             "Invalid indices: %1$s.\nPerson does not exist in current list.";

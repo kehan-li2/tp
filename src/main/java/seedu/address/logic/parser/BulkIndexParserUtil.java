@@ -5,6 +5,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_RANGE;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_TOKEN;
+import static seedu.address.logic.Messages.MESSAGE_RANGE_INDEX_LARGE;
 import static seedu.address.logic.Messages.MESSAGE_RANGE_TOO_LARGE;
 
 import java.util.ArrayList;
@@ -142,7 +143,7 @@ public final class BulkIndexParserUtil {
             end = Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
             // Only possible case now = overflow
-            throw new ParseException(MESSAGE_RANGE_TOO_LARGE);
+            throw new ParseException(MESSAGE_RANGE_INDEX_LARGE);
         }
 
         if (start <= 0 || end <= 0) {

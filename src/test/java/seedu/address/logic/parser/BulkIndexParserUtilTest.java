@@ -6,6 +6,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_RANGE;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_TOKEN;
+import static seedu.address.logic.Messages.MESSAGE_RANGE_INDEX_LARGE;
 import static seedu.address.logic.Messages.MESSAGE_RANGE_TOO_LARGE;
 import static seedu.address.testutil.Assert.assertThrows;
 
@@ -170,8 +171,8 @@ public class BulkIndexParserUtilTest {
     }
 
     @Test
-    public void parseBulkIndexes_rangeTooLargeNumberFormat_throwsParseException() {
-        assertThrows(ParseException.class, MESSAGE_RANGE_TOO_LARGE, () ->
+    public void parseBulkIndexes_rangeIndexTooLarge_throwsParseException() {
+        assertThrows(ParseException.class, MESSAGE_RANGE_INDEX_LARGE, () ->
                 BulkIndexParserUtil.parseBulkIndexes("999999999999-999999999999", USAGE_MESSAGE));
     }
 
