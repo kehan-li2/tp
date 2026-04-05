@@ -60,4 +60,17 @@ public class ListCommandTest {
                 expectedModel);
     }
 
+    @Test
+    public void execute_noSort_resetsSort() {
+        model.sortFilteredPersonList(SortField.NAME);
+
+        ListCommand command = new ListCommand(null);
+
+        expectedModel.resetSort();
+
+        assertCommandSuccess(command, model,
+                ListCommand.MESSAGE_SUCCESS,
+                expectedModel);
+    }
+
 }
