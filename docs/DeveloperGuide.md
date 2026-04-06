@@ -1198,6 +1198,39 @@ Expected:
 - Step 1: no prefix suggestion is accepted.
 - Step 2: prefix suggestion is accepted (starts with `n/`).
 
+### Remembering a command
+
+*Prerequisites:*
+- CareSync command box is focused.
+
+!!**Positive Test Case 1: Recall older commands**!!
+
+Steps:
+1. Run `list`.
+2. Run `find n/Alex`.
+3. Press `ARROW_UP` twice.
+
+Expected:
+- First `ARROW_UP`: command box shows `find n/Alex`.
+- Second `ARROW_UP`: command box shows `list`.
+
+!!**Positive Test Case 2: Navigate back down**!!
+
+Steps:
+1. After recalling older commands, press `ARROW_DOWN` until newest.
+
+Expected:
+- Command box cycles toward newer commands and finally becomes empty.
+
+!!**Positive Test Case 3: Consecutive duplicates are not duplicated in history**!!
+
+Steps:
+1. Run `list`.
+2. Run `list` again.
+3. Press `ARROW_UP` once.
+
+Expected:
+- Only one `list` entry is recalled for consecutive duplicate submissions.
 
 ### Saving data
 
