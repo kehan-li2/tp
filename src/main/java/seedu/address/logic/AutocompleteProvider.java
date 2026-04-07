@@ -18,6 +18,8 @@ public final class AutocompleteProvider {
     private static final Logger logger = LogsCenter.getLogger(AutocompleteProvider.class);
     private static final String EMPTY_STRING = "";
     private static final String SINGLE_SPACE = " ";
+    private static final String PREFIX_TOKEN = "/";
+    private static final String WHITESPACE_REGEX = "\\s+";
 
     private static final Set<String> NO_REPEATABLE_PREFIXES = Set.of();
 
@@ -119,6 +121,16 @@ public final class AutocompleteProvider {
         if (config.isFindModeExclusive()) {
             return suggestFindPrefixCompletion(input, targetArgs, lastToken, config.prefixes());
         }
+
+        return suggestStandardPrefixCompletion(input, targetArgs, lastToken, config);
+    }
+
+    private static Optional<String> suggestStandardPrefixCompletion(
+            String input, String targetArgs, String lastToken, AutocompleteCommandMetadata config) {
+        assert input != null : "suggestStandardPrefixCompletion input must not be null";
+        assert targetArgs != null : "suggestStandardPrefixCompletion targetArgs must not be null";
+        assert lastToken != null : "suggestStandardPrefixCompletion lastToken must not be null";
+        assert config != null : "suggestStandardPrefixCompletion config must not be null";
 
         if (!lastToken.isEmpty() && hasInvalidArgsBeforeCurrentToken(targetArgs, lastToken, config.prefixes())) {
             return Optional.empty();
@@ -281,12 +293,12 @@ public final class AutocompleteProvider {
         assert args != null : "containsInvalidPrefixToken args must not be null";
         assert prefixes != null : "containsInvalidPrefixToken prefixes must not be null";
 
-        for (String token : args.split("\\s+")) {
+        for (String token : args.split(WHITESPACE_REGEX)) {
             if (token.isBlank()) {
                 continue;
             }
 
-            if (token.contains("/") && prefixes.stream().noneMatch(token::startsWith)) {
+            if (token.contains(PREFIX_TOKEN) && prefixes.stream().noneMatch(prefix -> token.startsWith(prefix))) {
                 return true;
             }
         }
