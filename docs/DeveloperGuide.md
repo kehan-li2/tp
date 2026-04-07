@@ -726,6 +726,14 @@ Steps:
 Expected:
 - Command fails with message: `Tag names should be alphanumeric and at most 15 characters long`
 
+!!**Negative Test Case 10: Duplicate tag values**!!
+
+Steps:
+1. Run `add n/Bob p/91234567 e/bob@example.com a/Bob street, block 123, #01-01 t/friend t/Friend`
+
+Expected:
+- Command fails with message: `Duplicate tags detected! Tag names are case-insensitive`
+
 ### Archiving a contact : `archive`
 
 *Prerequisites:*
