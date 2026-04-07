@@ -48,6 +48,8 @@ public final class AutocompleteProvider {
      *     Enforces index requirement for commands like edit, note, and tag
      *     Progressively suggests prefixes in order after previous prefixes are entered
      *     For repeatable prefixes (e.g., "t/"), continues suggesting after all other prefixes are complete
+     *     Stops suggesting whencommand becomes complete (e.g., "find n/Alice)
+     *         or when invalid input is detected (e.g., "add x/")
      *
      * @param userInput the user's current input string
      * @return an {@code Optional} containing the full completed suggestion if one exists,
