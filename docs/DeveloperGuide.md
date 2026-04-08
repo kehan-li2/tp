@@ -819,7 +819,7 @@ Steps:
 Expected:
 - Command fails with message: `Invalid command format! Usage: list [s/SORT_FIELD]`
 
-### Listing archived contacts : `list-archive`
+### Listing all archived contacts : `list-archive`
 
 *Prerequisites:*
 - At least one archived contact exists (optional, for non-empty results).
