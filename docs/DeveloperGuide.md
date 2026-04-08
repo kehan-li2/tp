@@ -774,7 +774,7 @@ Steps:
 Expected:
 - Command fails with message: `The contact index provided is invalid.`
 
-### Listing all contacts : `list`
+### Listing all unarchived contacts : `list`
 
 *Prerequisites:*
 - CareSync is running.
