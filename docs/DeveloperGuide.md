@@ -186,29 +186,29 @@ This section describes some noteworthy details on how certain features are imple
 
 #### Implementation
 
-The `archive` mechanism is facilitated by an archive flag stored in each Person.
-A person is considered archived when this flag is true, and active otherwise.
+The `archive` mechanism is facilitated by an archive flag stored in each contact.
+A contact is considered archived when this flag is true, and active otherwise.
 
 The mechanism uses the following Model operations:
 
-- `archivePerson(person)`: marks a person as archived.
-- `unarchivePerson(person)`: marks a person as active again.
+- `archivePerson(person)`: marks a contact as archived.
+- `unarchivePerson(person)`: marks a contact as active again.
 - `updateFilteredPersonList(predicate)`: refreshes the displayed list for the current command context.
 
 Given below is an example usage scenario and how the archive mechanism behaves at each step.
 
 Step 1. The user executes `archive 1`.
-The `archive` command validates the index against the current filtered list and archives the selected person.
+The `archive` command validates the index against the current filtered list and archives the selected contact.
 
 Step 2. The command refreshes the filtered list using the current predicate so the UI reflects the updated state.
 
 Step 3. The user executes `list-archive`.
-The displayed list is filtered to show only archived persons.
+The displayed list is filtered to show only archived contacts.
 
 Step 4. The user executes `unarchive 1` from the archived list.
-The `unarchive` command marks the selected person as active again and refreshes the list.
+The `unarchive` command marks the selected contact as active again and refreshes the list.
 
-Step 5. The command result is returned to `Logic`, and `Logic` persists the updated address book through Storage.
+Step 5. The command result is returned to `Logic`, and `Logic` persists the updated address book through `Storage`.
 
 The following sequence diagram shows how an `archive` operation goes through the `Logic` component:
 
