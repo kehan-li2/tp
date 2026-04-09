@@ -748,6 +748,7 @@ Expected:
 *Prerequisites:*
 - At least one visible contact exists in the current list.
 - Run `list` before each INDEX-based test unless the test case intentionally uses a filtered list.
+- There are fewer than 999 contacts.
 - Refer to [User Guide: Archiving a contact](UserGuide.md#archiving-a-contact--archive) for command usage
 
 !!**Positive Test Case 1: Archive by valid index**!!
@@ -856,6 +857,7 @@ Expected:
 *Prerequisites:*
 - At least one contact exists in current displayed list.
 - Run `list` before each INDEX-based test case.
+- There are fewer than 999 contacts.
 - Refer to [User Guide: Editing a contact](UserGuide.md#editing-a-contact--edit) for field behavior (including tag replacement via `t/`)
 
 !!**Positive Test Case 1: Edit one field**!!
