@@ -156,7 +156,7 @@ The `Storage` component,
 
 ### Common classes
 
-The following are a non-exhaustive list of common classes that live in `seedu.address.commons` and are reused across multiple components:
+The following is a non-exhaustive list of common classes that live in `seedu.address.commons` and are reused across multiple components:
 * Config — stores application configuration such as logging level and file paths.
 * GuiSettings — stores UI-related preferences such as window size and position.
 * LogsCenter — configures and manages application-wide logging, providing logger instances used across the system.
