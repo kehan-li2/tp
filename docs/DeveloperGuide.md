@@ -258,7 +258,7 @@ Aspect: How archived data is represented
 
 2. Alternative 2: Move archived contacts into a separate collection.
    * Pros: Strong conceptual separation between active and archived contacts.
-   * Cons: Higher complexity for edit, find, delete, indexing, and synchronization logic.
+   * Cons: Higher complexity for `edit`, `find`, `delete`, indexing, and synchronization logic.
 
 {more aspects and alternatives to be added}
 
