@@ -142,7 +142,7 @@ Format: `add n/NAME p/PHONE e/EMAIL a/ADDRESS [nt/NOTE] [v/VISIT_DATE_TIME] [t/T
 
 * `n/`, `p/`, `e/`, and `a/` are **compulsory** and must each appear **exactly once**.
 * `nt/` and `v/` are **optional** and can each appear at most once.
-* You cannot add a contact whose name already exists in CareSync (case-sensitive).
+* You cannot add a contact whose name already exists in CareSync.
 * You cannot add a contact whose `VISIT_DATE_TIME` is in the past.
 
 <box type="tip" seamless>
@@ -521,7 +521,7 @@ Action     | Format                                                             
 - **n/NAME**: Refers to the name of the contact.
   - The 1st character **must be an alphanumeric character**
   - Can only contain alphanumeric characters and whitespaces (` `)
-  - **No contacts** can have the same `NAME` (case-sensitive)
+  - **No contacts** can have the same `NAME` (case-insensitive. i.e., `Adam` and `adam` cannot exist at the same time)
   - Max length: 80<br><br>
 - **p/PHONE**: Refers to the phone number of the contact.
   - The 1st character **must be a numeric character or `+`**
