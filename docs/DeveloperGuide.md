@@ -1156,7 +1156,7 @@ Steps:
 1. Run `note -1 nt/Follow up`
 
 Expected:
-- Command fails with message: `Invalid index. Index must be a non-zero positive number (1, 2, 3...).`
+- Command fails with message: `Invalid index. Index must be a non-zero positive integer (1, 2, 3...).`
 
 ### Managing tags for a contact : `tag`
 
@@ -1302,7 +1302,7 @@ Steps:
 1. Run `delete -1`
 
 Expected:
-- Command fails with message: `Invalid index. Index must be a non-zero positive number (1, 2, 3...).`
+- Command fails with message: `Invalid index. Index must be a non-zero positive integer (1, 2, 3...).`
 
 !!**Negative Test Case 7: Index too large**!!
 
