@@ -328,7 +328,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | expert user    | add aliases to commands                                    | execute commands faster                                | ✗           |
 | `* *`    | new user       | view a list of common commands when opening the app        | refer to instructions without using an external manual | ✓           |
 | `*`      | expert user    | combine commands                                           | execute commands efficiently                           | ✗           |
-| `*`      | user           | set visit type (e.g. consultation, remote)                 | understand the nature of the visiSt                    | ✗           |
+| `*`      | user           | set visit type (e.g. consultation, remote)                 | understand the nature of the vist                      | ✗           |
 | `*`      | user           | specify the visit duration                                 | plan my time realistically                             | ✗           |
 | `*`      | user           | view completed visits                                      | understand my visit history                            | ✗           |
 | `*`      | user           | mark a visit as planned, completed, or cancelled           | track visit status and outcomes                        | ✗           |
@@ -1511,7 +1511,7 @@ Expected:
 ## **Appendix: Planned Enhancement**
 Team Size: 5
 
-6. **Allow contacts with identical names but different details:** Currently, the application does not allow multiple contacts with the same name even if their other details differ. We plan to allow contacts to share the same name as long as other identifying fields (e.g. phone number, address) are different, so that users can manage contacts with common names more effectively.
+6. **Allow contacts with identical names but different details:** Currently, the application does not allow multiple contacts with the same name even if their other details differ. To better reflect real-world cases where people can have identical names, we plan to allow multiple contacts with the same name as long as other identifying fields (e.g., phone number, address) are different.
 7. **Improve response command box usability:** Currently, the response text box requires horizontal scrolling to view long messages and is too small, making it difficult for users to read outputs without excessive scrolling. We plan to modify the UI so that the text box wraps text and supports vertical scrolling, as well as increase its size to display more content at once for better readability.
 8. **Enable sorting in archived contact list:** Currently, users are unable to sort contacts in the archived list. We plan to add sorting functionality (e.g. by name and visit date) to the archived contacts list to improve usability and navigation. For example, users can enter `list-archive s/name` to view archived contacts sorted by name or `list-archive s/visit` to view archived contacts sorted by visit date.
 9. **Allow text selection in help window:** Currently, users are unable to select or copy text from the help window. We plan to enable text selection so that users can copy commands or instructions easily for reference.
