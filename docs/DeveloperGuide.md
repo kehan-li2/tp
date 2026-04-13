@@ -129,7 +129,7 @@ How the parsing works:
 ### Model component
 **API** : [`Model.java`](https://github.com/AY2526S2-CS2103-F11-1/tp/blob/master/src/main/java/seedu/address/model/Model.java)
 
-<puml src="diagrams/ModelClassDiagram.puml" width="450" />
+<puml src="diagrams/ModelClassDiagram.puml" width="600" />
 
 The `Model` component,
 
@@ -242,6 +242,7 @@ The following activity diagram summarizes what happens when a user executes the 
 <box type="info" seamless>
 
 **Note:** If the command returns an error (for example invalid index), no data is modified.
+
 **Note:** After successful command execution, Logic persists the current address book through `Storage`.
 
 </box>
